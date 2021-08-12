@@ -2,7 +2,9 @@ from .models import *
 from django import forms
 
 class DateInput(forms.DateInput):
+ 
     input_type = 'date'
+
 
 
 class StudentForm(forms.ModelForm):
@@ -18,3 +20,5 @@ class GraduationForm(forms.ModelForm):
         widgets = {'belt_since': DateInput(), 'graduation': forms.HiddenInput()}
         model = Graduation
         fields = '__all__'
+
+

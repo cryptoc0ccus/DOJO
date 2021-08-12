@@ -4,6 +4,7 @@
 
 <!--FIRST ROW -->
 
+
 <div class="container">
 
   <div class="row aligncenter">
@@ -20,10 +21,10 @@
   
     </div>
   
-  
+    
     <div class="col-md">
-      <h1> {{ student.first_name }} {{ student.last_name }} </h1>
-      <h2> {{ student.user }} </h2>
+      <h1 align="center"> {{ student.first_name }} {{ student.last_name }} </h1>
+      <h2 align="center"> {{ student.user }} </h2>
   
   
     </div>
@@ -39,7 +40,7 @@
       {% endif %}
   
   <!--		<img src="{% static '/media/dojowhite.svg'  %}" alt="Avatar" class="avatar-top">-->
-      <h3>Membership: <span class="badge badge-bg-rod">{{ student_id.membership.membership_status }}</span></h3>
+      <h2 align="center">Membership <span class="badge badge-bg-rod">{{ student.membership.membership_status }}</span></h3>
       {% if student.membership.membership_status == "ACTIVE" %}
         <h3> Expires on: {{student_id.membership.membership_expiration}} </h3>
       {% else %}
@@ -47,6 +48,7 @@
       {% endif %}
   
     </div>
+ 
   <hr>
   
   </div>
@@ -58,17 +60,65 @@
 	<div class="col-md-6">
 		<div class="card card-body">
 			<h5>Primary Information</h5>
-			<hr>
-			<a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'datatables:Student-update' student.id %}">Update</a>
+			<hr>		
 			<p><b>Phone:</b> {{ student.phone }}</p>
 			<p><b>Address:</b> {{ student.address }}</p>
 			<p><b>Age:</b> {{ student.age }}</p>
 			<p><b>Gender:</b> {{ student.gender }} </p>
-      {% if student.graduation.belt != None %}
-      <p><b>Graduation:</b> {{ student.graduation.belt }} <a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'datatables:Graduation-update' student.graduation.id %}">Update</a> </p>
+      <hr>
+      {% if not student.graduation.belt  %}
+      <p><b>Graduation:</b> N/A </p>      
       {% else %}
-      <p><b>Graduation:</b> N/A </p>
+
+    
+      <p><b>Graduation:</b> <a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'datatables:Graduation-update' student.graduation.id %}">Update</a> </p>
+
+
+     
+
+      <div class="container">
+        <div class="row align-items-start">
+          <div class="col">
+            {% if student.graduation.belt == "WHITE" %}
+            <img class="marginauto" align="left" src="{% static '/media/bjjwhitebelt.svg'  %}" alt="Avatar" class="avatar-top" width="100" height="50">
+            {% elif student.graduation.belt == "BLUE" %}
+            <img class="marginauto"  src="{% static '/media/bjjbluebelt.svg'  %}" alt="Avatar" class="avatar-top" width="100" height="50">
+            {% elif student.graduation.belt == "PURPLE" %}
+            <img class="marginauto"  src="{% static '/media/bjjpurplebelt.svg'  %}" alt="Avatar" class="avatar-top" width="100" height="50">
+            {% elif student.graduation.belt == "BROWN" %}
+            <img class="marginauto"  src="{% static '/media/bjjbrownbelt.svg'  %}" alt="Avatar" class="avatar-top" width="100" height="50">
+            {% elif student.graduation.belt == "BLACK" %}
+            <img class="marginauto"  src="{% static '/media/bjjblackbelt.svg'  %}" alt="Avatar" class="avatar-top" width="100" height="50">
+            {% endif %}
+
+
+
+          </div>
+          <div class="col">
+            <p><b>Stripe</b></p>
+            <p>{{ student.graduation.stripe }} </p>
+
+
+          </div>
+          <div class="col">
+            <p><b>Last Graduation:</b></p>
+            <p>{{ student.graduation.belt_since }}</p>
+          </div>
+        </div>
+        </div>
+     
+      
+        
+        
+      
+
       {% endif %}
+    
+      
+
+
+
+
 		</div>
 	</div>
 </div>
