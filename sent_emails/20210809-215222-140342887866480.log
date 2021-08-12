@@ -1,0 +1,24 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: <!DOCTYPE html><html lang="en"><head>    <meta charset="UTF-8">
+    <title>Title</title></head><body></body></html>
+From: webmaster@localhost
+To: teste@teste.de
+Date: Mon, 09 Aug 2021 21:52:22 -0000
+Message-ID: <162854594293.52808.9561832667277649030@pybuntu-box>
+
+
+    Um das Passwort für den Account teste@teste.de zurückzusetzen,
+    öffne den folgenden Link:
+
+    http://127.0.0.1:8000/accounts/reset/NQ/ar4vfa-8dc6691352da0e9eb7d667e2c7c45bb2/
+
+    Wenn der Link nicht funktionieren sollte, kopiere die URL und gib diese in einem neuen
+    Browserfenster ein.
+
+
+    Beste Grüße
+    Dein MyCalendar-Team
+
+-------------------------------------------------------------------------------

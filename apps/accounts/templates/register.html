@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+<div class="container-fluid">
+  <div class="row no-gutter">
+    <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image"></div>
+    <div class="col-md-8 col-lg-6">
+      <div class="login d-flex align-items-center py-5">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-9 col-lg-8 mx-auto">
+              <h1 class="login-heading mb-4">DOJO BERLIN</h1>
+                <h3 class="login-heading mb-4">Sign up</h3>
+              <form method="POST">{% csrf_token %}
+                <div class="form-label-group">
+                    {% render_field form.email class="form-control" %}
+                  <label for="id_email">E-Mail Address</label>
+                    {{ form.email.errors }}
+                </div>
+
+                  <div class="form-label-group">
+                  {% render_field form.password1 class="form-control" %}
+                  <label for="id_password_1">Password</label>
+                    {{ form.password1.errors }}
+                </div>
+                  <div class="form-label-group">
+                  {% render_field form.password2 class="form-control" %}
+                  <label for="id_password_2">Confirm Password</label>
+                      {{ form.password2.errors }}
+                </div>
+                <!-- reCAPTCHA input -->
+                <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response"> 
+                <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">Sign up</button>
+              </form>
+                <p style="margin-top: 128px;">
+                <small>
+                    Photo by <a href="https://unsplash.com/@nate_dumlao?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Nathan Dumlao</a> on <a href="/s/photos/calendar?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+                </small>
+                </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block js%}
+  <!-- reCAPTCHA API -->
+  <script src='https://www.google.com/recaptcha/api.js?render={{recaptcha_site_key}}'></script>
+  <script>
+    //global grecaptcha
+    grecaptcha.ready(function() {
+      grecaptcha.execute('{{recaptcha_site_key}}', {action: "login/"}).then(function(token) {
+        document.getElementById('g-recaptcha-response').value = token;
+      });
+    });
+  </script>
+  {% endblock js %}

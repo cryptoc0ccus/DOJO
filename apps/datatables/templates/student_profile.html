@@ -1,0 +1,88 @@
+{%  extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!--FIRST ROW -->
+
+<div class="container">
+
+  <div class="row aligncenter">
+    <div class="col-md">
+  
+      <img src="{{student.profile_img.url}}" style="object-fit:scale-down;
+              max-width:400px;
+              height:auto;
+              border: solid 1px #CCC"/>
+      <br>
+      <a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'datatables:Student-update' student.id %}">Update Student</a>         
+     
+      <a class="btn btn-outline-danger  btn-sm btn-block" href="{% url 'datatables:Student-delete' student.id %}">Delete Student</a>  
+  
+    </div>
+  
+  
+    <div class="col-md">
+      <h1> {{ student.first_name }} {{ student.last_name }} </h1>
+      <h2> {{ student.user }} </h2>
+  
+  
+    </div>
+  
+    <div class="col-md">
+  
+      {% if student.membership.membership_type == "GOLD" %}
+      <img class="marginauto" src="{% static '/media/dojogold.png'  %}" alt="Avatar" class="avatar-top" width="100" height="100">
+      {% elif student.membership.membership_type == "SILVER" %}
+      <img class="marginauto" src="{% static '/media/dojosilver.png'  %}" alt="Avatar" class="avatar-top" width="100" height="100">
+      {% elif student.membership.membership_type == "BRONZE" %}
+      <img class="marginauto" src="{% static '/media/dojobronze.png'  %}" alt="Avatar" class="avatar-top" width="100" height="100">
+      {% endif %}
+  
+  <!--		<img src="{% static '/media/dojowhite.svg'  %}" alt="Avatar" class="avatar-top">-->
+      <h3>Membership: <span class="badge badge-bg-rod">{{ student_id.membership.membership_status }}</span></h3>
+      {% if student.membership.membership_status == "ACTIVE" %}
+        <h3> Expires on: {{student_id.membership.membership_expiration}} </h3>
+      {% else %}
+        <h3> {{student.membership.membership_expiration}} </h3>
+      {% endif %}
+  
+    </div>
+  <hr>
+  
+  </div>
+
+  <br>
+<!--SECOND ROW -->
+
+<div class="row">
+	<div class="col-md-6">
+		<div class="card card-body">
+			<h5>Primary Information</h5>
+			<hr>
+			<a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'datatables:Student-update' student.id %}">Update</a>
+			<p><b>Phone:</b> {{ student.phone }}</p>
+			<p><b>Address:</b> {{ student.address }}</p>
+			<p><b>Age:</b> {{ student.age }}</p>
+			<p><b>Gender:</b> {{ student.gender }} </p>
+      {% if student.graduation.belt != None %}
+      <p><b>Graduation:</b> {{ student.graduation.belt }} <a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'datatables:Graduation-update' student.graduation.id %}">Update</a> </p>
+      {% else %}
+      <p><b>Graduation:</b> N/A </p>
+      {% endif %}
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+{% endblock content %}

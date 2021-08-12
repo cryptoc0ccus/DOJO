@@ -1,0 +1,89 @@
+header{
+background-color: black;
+}
+
+.jumbotron{
+color: #000000;
+background-color: #1e2a35 !important;
+
+}
+
+ body{
+  font-family: Verdana, Geneva, sans-serif;
+  font-size: 14px;
+  font-color: white;
+  color: #2992fa !important;
+ background:
+
+        /* top, transparent black, faked with gradient */
+        linear-gradient(
+          rgba(0, 0, 0, 0.7),
+          rgba(0, 0, 0, 0.7)
+        ),
+        /* bottom, image */
+         url(https://cdn.hipwallpaper.com/i/67/19/TXEAb1.jpg);
+    }
+
+}
+
+p {
+color: white;
+}
+
+img {
+    opacity: .75;
+    transition: opacity .5s ease-in-out;
+  }
+  img:hover {
+    opacity: 1;
+  }
+.card {
+background-color: black !important;
+}
+
+
+.card-body {
+background-color: black !important;
+}
+.card-header {
+background-color: black !important;
+}
+
+.card-title {
+background-color: black !important;
+}
+
+
+.card-post{
+  width: 24%;
+  height: 370px;
+  margin: 30px auto;
+}
+.scrollable{
+  overflow-y: auto;
+  max-height: 200px;
+}
+ .container {
+width: 100%;
+height: auto;
+background-color: black !important;
+margin-right: auto;
+margin-left: auto;
+color: #7ee4e4;
+}
+
+textarea {
+background-color: black;
+color: #bfbfbf;
+
+}
+
+input {
+background-color: black;
+color: #bfbfbf;
+}
+
+select {
+background-color: black;
+color: #bfbfbf;
+}

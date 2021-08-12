@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+<div class="container-fluid">
+  <div class="row no-gutter">
+    <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image"></div>
+    <div class="col-md-8 col-lg-6">
+      <div class="login d-flex align-items-center py-5">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-9 col-lg-8 mx-auto">
+              <h1 class="login-heading mb-4">DOJO BERLIN</h1>
+                <h3 class="login-heading mb-4">Welcome Back!</h3>
+              <form method="post"> {% csrf_token %}
+                <div class="form-label-group">
+                  {% render_field form.email class="form-control" %}
+
+<!--                  <input type="email" id="inputEmail" class="form-control" placeholder="E-Mail Adresse" required autofocus>-->
+                  <label for="inputEmail">E-Mail Address</label>
+                </div>
+
+                <div class="form-label-group">
+                  {% render_field form.password class="form-control" type="password" %}
+<!--                  <input type="password" id="inputPassword" class="form-control" placeholder="Passwort" required>-->
+                  <label for="inputPassword">Password</label>
+                  {{form.password.errors}}
+                </div>
+
+                <!-- reCAPTCHA input -->
+                <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response"> 
+                
+                <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">Login</button>
+                  <a href="{% url 'accounts:user_register' %}" class="btn btn-outline-primary btn-block btn-login text-uppercase font-weight-bold mb-2"> Sign up</a>
+                <div class="text-center">
+                  <a class="small" href="{% url 'accounts:password_reset' %}">Forgot your password?</a></div>
+              </form>
+                <p style="margin-top: 128px;">
+                <small>
+                    Photo by <a href="https://unsplash.com/@nate_dumlao?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Nathan Dumlao</a> on <a href="/s/photos/calendar?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+                </small>
+                </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block js%}
+  <!-- reCAPTCHA API -->
+  <script src='https://www.google.com/recaptcha/api.js?render={{recaptcha_site_key}}'></script>
+  <script>
+    //global grecaptcha
+    grecaptcha.ready(function() {
+      grecaptcha.execute('{{recaptcha_site_key}}', {action: "login/"}).then(function(token) {
+        document.getElementById('g-recaptcha-response').value = token;
+      });
+    });
+  </script>
+  {% endblock js %}
