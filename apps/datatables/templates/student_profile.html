@@ -67,7 +67,7 @@
 			<p><b>Gender:</b> {{ student.gender }} </p>
       <hr>
       {% if not student.graduation.belt  %}
-      <p><b>Graduation:</b> N/A </p>      
+      <p><b>Graduation:</b> N/A <a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'datatables:Graduation-update' student.graduation.id %}">create</a></p>      
       {% else %}
 
     

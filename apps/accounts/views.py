@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import RegistrationForm, AccountAuthenticationForm
 from django.conf import settings
 
+
 # Create your views here.
 
 def home(request):
@@ -15,15 +16,14 @@ def register_view(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)
+            login(request, user)         
             return redirect('../home')
     else:
         form = RegistrationForm()
     context['form'] = form
     context['recaptcha_site_key'] = settings.GOOGLE_RECAPTCHA_SITE_KEY
     return render(request, "register.html", context)
-
-    return render(request, 'register.html', context)
+    
 
 def login_view(request):
     if request.user.is_authenticated:
