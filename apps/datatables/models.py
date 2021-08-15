@@ -46,8 +46,9 @@ class Student(models.Model):
         blank=True)
     profile_img = models.ImageField(upload_to=upload_location, null=True, blank=True,  default = '../media/profile_images/no-img.png')
 
-    def get_absolute_url(self):
-        return reverse('Student', kwargs={'pk': self.pk})
+    #TODO: Not working
+    # def get_absolute_url(self):
+    #     return reverse('Student', kwargs={'pk': self.pk})
 
     class Meta:
         ordering = ['first_name']

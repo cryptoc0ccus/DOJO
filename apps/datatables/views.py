@@ -50,7 +50,7 @@ class StudentCreate(LoginRequiredMixin, CreateView):
     form_class = StudentForm
     context_object_name = 'student'
     #fields = ['first_name', 'last_name']
-    #success_url = reverse_lazy('datatables:Students')
+    success_url = reverse_lazy('datatables:Students')
     template_name = '../templates/student_form.html'
 
     def form_valid(self, form):

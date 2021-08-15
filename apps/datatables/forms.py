@@ -11,7 +11,8 @@ class StudentForm(forms.ModelForm):
     class Meta:
         widgets = {'birth_date': DateInput(), 'user': forms.HiddenInput()}
         model = Student
-        fields = '__all__'
+        #fields = '__all__'
+        exclude = ('user',)
 
 
 class GraduationForm(forms.ModelForm):
