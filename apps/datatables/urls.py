@@ -18,7 +18,11 @@ urlpatterns = [
 
 ## Graduation
     path('graduation/update/<str:pk>/', GraduationUpdate.as_view(), name='Graduation-update'), 
-
+## Membership
+    path('membership/update/<str:pk>/', MembershipUpdate.as_view(), name='Membership-update'), 
+## Membership
+    path('posts/create/<str:pk>/', PostCreate.as_view(), name='Post-create'),
+    path('posts/delete/<str:pk>/', PostDelete.as_view(), name='Post-delete'),  
     
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

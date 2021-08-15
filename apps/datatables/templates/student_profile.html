@@ -41,10 +41,18 @@
   
   <!--		<img src="{% static '/media/dojowhite.svg'  %}" alt="Avatar" class="avatar-top">-->
       <h2 align="center">Membership <span class="badge badge-bg-rod">{{ student.membership.membership_status }}</span></h3>
-      {% if student.membership.membership_status == "ACTIVE" %}
-        <h3> Expires on: {{student_id.membership.membership_expiration}} </h3>
+
+      {% if student.membership.member_since is None %}  
+      <div style="text-align: center">
+        <a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'datatables:Membership-update' student.membership.id %}">create</a></p> 
+      </div>
+     
+      {% elif student.membership.membership_status == "ACTIVE" %}
+        <h3> Expires on: {{student.membership.membership_expiration}} </h3>
+        <a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'datatables:Membership-update' student.membership.id %}">Update</a></p> 
       {% else %}
         <h3> {{student.membership.membership_expiration}} </h3>
+        
       {% endif %}
   
     </div>
@@ -121,6 +129,18 @@
 
 		</div>
 	</div>
+</div>
+<div class="row">
+  <div class="col-md">
+    <div class="card card-body">
+      <h5>Latest Posts</h5>
+      <hr>
+      <a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'datatables:Post-create' student.id %}">Create Post</a>
+  
+      {% include 'post_list.html' %}
+    </div>
+  </div>
+
 </div>
 
 

@@ -9,7 +9,7 @@ class DateInput(forms.DateInput):
 
 class StudentForm(forms.ModelForm):
     class Meta:
-        widgets = {'birth_date': DateInput()}
+        widgets = {'birth_date': DateInput(), 'user': forms.HiddenInput()}
         model = Student
         fields = '__all__'
 
@@ -22,3 +22,14 @@ class GraduationForm(forms.ModelForm):
         fields = '__all__'
 
 
+class MembershipForm(forms.ModelForm):
+    class Meta:
+        widgets = {'member_since': DateInput(), 'membership': forms.HiddenInput(), 'activation_date': DateInput(),}
+        model = Membership
+        fields = '__all__'
+
+class PostsForm(forms.ModelForm):
+    class Meta:
+        widgets = {'posts': forms.HiddenInput(),'created_on': DateInput(),}
+        model = Posts
+        fields = '__all__'

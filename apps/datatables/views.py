@@ -5,6 +5,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from django.urls import reverse_lazy
+from django.template import Context, Template, context
 
 
 from django.shortcuts import render
@@ -33,27 +34,32 @@ class StudentDetail(DetailView):
     model = Student
     context_object_name = 'student'
     template_name = '../templates/student_profile.html'
+#    TODO: check if I still need this workaround
 
     def get_context_data(self, **kwargs):
-        student = super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         student_obj = get_object_or_404(Student,pk=self.kwargs['pk'])
+        post = student_obj.posts_set.all()
+        context['post'] = post
+        t = Template("post_list.html")
+        t.render(Context(context))      
+        return context
 
-        graduation = Graduation(graduation=student_obj, belt_since=datetime.date.today())
-        
-        student['graduation'] = graduation        
-        return student
-
-class StudentCreate(CreateView):
+class StudentCreate(LoginRequiredMixin, CreateView):
     model = Student
     form_class = StudentForm
     context_object_name = 'student'
     #fields = ['first_name', 'last_name']
-    success_url = reverse_lazy('datatables:Students')
+    #success_url = reverse_lazy('datatables:Students')
     template_name = '../templates/student_form.html'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 class StudentUpdate(UpdateView):
     model = Student
-    fields = ['first_name', 'last_name', "phone", "address"]
+    form_class = StudentForm
     success_url = reverse_lazy('datatables:Students')
     template_name = '../templates/student_form.html'
 
@@ -73,33 +79,76 @@ class GraduationUpdate(UpdateView):
     template_name = '../templates/student_form.html'
 
     
+## Membership
+class MembershipUpdate(UpdateView):
+    model = Membership
+    form_class = MembershipForm
+    context_object_name = 'membership'
+    success_url = reverse_lazy('datatables:Students')
+    template_name = '../templates/student_form.html'
+
+
+## Post
+class PostCreate(CreateView):
+    model = Posts
+    form_class = PostsForm
+    context_object_name = 'post'
+    success_url = reverse_lazy('datatables:Students')
+    template_name = '../templates/student_form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        post_obj = get_object_or_404(Student,pk=self.kwargs['pk'])
+
+             #student = self.post
+        #print(student)
+        context["post"] = post_obj.posts_set.all()
+        return context
 
 
 
-
-# class DashboardView(View):
-#     #render out the template
-#     def get(self, request, *args, **kwargs):
-#         students = Student.objects.all()
-#         context = {'students': students}
-#         return render(request, 'dashboard.html', context)
-
-#     def post(self, request, *args, **kwargs):
-#         pass
+class PostDelete(DeleteView):
+    model = Posts
+    context_object_name = 'post'
+    success_url = reverse_lazy('datatables:Students')
+    template_name = '../templates/delete.html'
 
 
 
+# def form_valid(self, form):
+#         form.instance.categoria_id = self.kwargs['categoria']
+#         return super().form_valid(form)
 
 
+# site = Site.objects.get(id=self.kwargs['site'])
+# fire_alarm.site = site
+
+# def create_post(request, pk):
+#     context = {}
+#     student_id = Student.objects.get(id=pk)
+#     getlink = '/students/profile/view/' + pk
+#     new_post = Posts(posts=student_id, posts_created_on=datetime.date.today())
+
+#     form = PostsForm(instance=new_post)
+
+#     if request.method == 'POST':
+#         form = PostsForm(request.POST, instance=new_post)
+#         if form.is_valid():
+#             form.save()
+
+#         return redirect(getlink)
+#     context['form'] = form
+#     return render(request, 'cuform.html', context)
 
 
+# def delete_post(request, pk):
+#     post = Posts.objects.get(id=pk)
+#     delete_post = 'True'
+#     parent_id = post.posts.id
+#     getlink = '/students/profile/view/' + str(parent_id)
+#     if request.method == "POST":
+#         post.delete()
+#         return redirect(getlink)
 
-
-#@login_required
-#@method_decorator(login_required, name='dispatch')
-
-# class DashboardView(ListView):
-#     model = Student
-# def dashboard(request):
-#     print('I GOT HERE')
-#     return render(request, 'dashboard.html')
+#     context = {'item': post, 'delete_post': delete_post}
+#     return render(request, 'delete.html', context)

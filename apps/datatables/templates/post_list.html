@@ -1,0 +1,55 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}"/>
+
+    <meta charset="UTF-8">
+    <title>Posts</title>
+
+    <style>
+tr {
+   border-bottom: 1px solid #ddd;
+
+
+   padding: 15px;
+}
+ tr:hover {background-color: #f5f5f5;}
+</style>
+</head>
+<body>
+
+<div class="scrollable">
+    <table id="posts" class=table">
+
+ <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+  <thead style="text-align:center"> <!--======================| thead is after caption |-->
+    <tr>
+      <th>Topic</th>
+      <th>Date</th>
+        <th>Post</th>
+        <th>Action</th>
+    </tr>
+  </thead>
+<hr>
+  <tbody> <!--======================| tbody is after thead |-->
+  {% for posts in post %}
+    <tr>
+        <td> {{ posts.category}} </td>
+        <td> {{ posts.created_on}} </td>
+        <td> {{ posts.content}} </td>
+
+        <td><a class="btn btn-sm btn-danger"  href="{% url 'datatables:Post-delete' posts.id %}">Delete</a></td>
+    </tr>
+
+  {% endfor %}
+
+  </tbody>
+
+
+
+    </table>
+</div>
+
+</body>

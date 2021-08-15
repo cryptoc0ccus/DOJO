@@ -9,6 +9,10 @@ from django.dispatch import receiver
 from apps.accounts.models import *
 from django.conf import settings
 from DOJO import settings
+from django.urls import reverse
+
+#from django.core.exceptions import
+
 
 def upload_location(instance, filename, **kwargs):
     file_path = 'profile_images/{filename}'.format(
@@ -41,6 +45,9 @@ class Student(models.Model):
         null=True,
         blank=True)
     profile_img = models.ImageField(upload_to=upload_location, null=True, blank=True,  default = '../media/profile_images/no-img.png')
+
+    def get_absolute_url(self):
+        return reverse('Student', kwargs={'pk': self.pk})
 
     class Meta:
         ordering = ['first_name']
@@ -121,7 +128,7 @@ class Membership(models.Model):
 
     )
     membership_status = models.CharField("Status", max_length=8, choices=ACTIVE_MEMBER, default="")
-    activation_date = models.DateField('date activated', null=True)  # timestamp when membership got activated
+    activation_date = models.DateField('date activated', null=True, validators=[MaxValueValidator(limit_value=date.today)])  # timestamp when membership got activated
 
     MEMBERSHIP_SELECTOR = (
         ('GOLD', 'GOLD'),
@@ -153,12 +160,19 @@ class Membership(models.Model):
         
 
     #Same here: Student profile is created, membership is created
+
+
+
+
+
+
     @receiver(post_save, sender=Student)
     def create_profile_for_new_user(sender, created, instance, **kwargs):
         if created:
             membership = Membership(membership=instance)
-        print('membership created')
-        membership.save()
+            print('membership created')
+            membership.save()
+    
 
 
 
@@ -192,15 +206,17 @@ class Posts(models.Model):
         ('Warning', 'Warning'),
         ('Graduation', 'Graduation'),
     )
-    posts = models.ForeignKey(Student, null=True, on_delete=models.CASCADE)
-    posts_category = models.CharField(max_length=15, choices=SUBJECT_SELECTOR,
+    
+    category = models.CharField(max_length=15, choices=SUBJECT_SELECTOR,
                                       default='')
-    posts_created_on = models.DateField(blank="True", null=True)
-    posts_content = models.TextField()
+    created_on = models.DateField(blank="True", null=True, validators=[MaxValueValidator(limit_value=date.today)])
+    content = models.TextField()
+
+    posts = models.ForeignKey(Student, null=True, on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ['posts_created_on']
+        ordering = ['created_on']
 
 
     def __str__(self):
-        return '%s' % self.posts_category
+        return '%s' % self.category
