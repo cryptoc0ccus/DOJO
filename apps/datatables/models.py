@@ -5,6 +5,7 @@ from PIL import Image
 from dateutil.relativedelta import relativedelta
 from django.core.validators import MaxValueValidator
 from django.db import models
+from django.db.models import F
 from django.dispatch import receiver
 from apps.accounts.models import *
 from django.conf import settings
@@ -46,9 +47,8 @@ class Student(models.Model):
         blank=True)
     profile_img = models.ImageField(upload_to=upload_location, null=True, blank=True,  default = '../media/profile_images/no-img.png')
 
-    #TODO: Not working
-    # def get_absolute_url(self):
-    #     return reverse('Student', kwargs={'pk': self.pk})
+    def get_absolute_url(self):
+        return reverse('datatables:Student', kwargs={'pk': self.pk})
 
     class Meta:
         ordering = ['first_name']
@@ -129,7 +129,8 @@ class Membership(models.Model):
 
     )
     membership_status = models.CharField("Status", max_length=8, choices=ACTIVE_MEMBER, default="")
-    activation_date = models.DateField('date activated', null=True, validators=[MaxValueValidator(limit_value=date.today)])  # timestamp when membership got activated
+    activation_date = models.DateField('date activated', blank=True, null=True)  # timestamp when membership got activated
+    activation_counter = models.IntegerField(blank=True, null=True, default=0)
 
     MEMBERSHIP_SELECTOR = (
         ('GOLD', 'GOLD'),
@@ -141,32 +142,44 @@ class Membership(models.Model):
         ('12 Months', '12 Months'),
         ('6 Months', '6 Months'),
         ('3 Months', '3 Months'),
+        ('1 Month', '1 Month')
     )
     membership_period = models.CharField("Period", max_length=10, choices=PERIOD_SELECTOR, default="")
 
     # membership Inheritance
     membership = models.OneToOneField(Student, null=True, on_delete=models.CASCADE)  
-
-    # Set activation date as status changes. -> Could it be done using another signal ???
-
-    def save_timestamp(self, *args, **kwargs):
-        if self.membership_status == 'ACTIVE' and self.activation_date is None:
-            self.activation_date = date.today()
-        elif self.membership_status == 'INACTIVE' and self.activation_date is not None:
-            self.activation_date = None
-        super(Membership, self).save(*args, **kwargs)
+     
 
     def __str__(self):
         return '%s' % self.membership
-        
+
+
+    # Set activation date as status changes. -> Could it be done using another signal ???
+
+
+    def save_timestamp(self, *args, **kwargs): 
+        if self.membership_status =='ACTIVE'  and self.activation_date is None:
+            if self.activation_counter is None:
+                self.activation_counter = 0
+            self.activation_counter += 1 
+            self.activation_date = date.today()           
+        elif self.membership_status == 'INACTIVE' and self.activation_date is not None:
+            self.activation_date = None
+            print(self.activation_counter)
+            super(Membership, self).save(*args, **kwargs)
+          
+        print(self.activation_counter)
+
+    # Statement.objects.filter(id__in=statements).update(vote=F('vote') + 1)
+    # def save_timestamp(self, *args, **kwargs):       
+    #     if self.membership_status == 'ACTIVE' and self.activation_date is None:
+    #         self.activation_date = date.today()
+    #         print('HERE: ', self.activation_counter)
+    #     elif self.membership_status == 'INACTIVE' and self.activation_date is not None:
+    #         self.activation_date = None
+    #     super(Membership, self).save(*args, **kwargs)
 
     #Same here: Student profile is created, membership is created
-
-
-
-
-
-
     @receiver(post_save, sender=Student)
     def create_profile_for_new_user(sender, created, instance, **kwargs):
         if created:
@@ -176,26 +189,33 @@ class Membership(models.Model):
     
 
 
+# FIXME: unsupported operand type(s) for +: 'NoneType' and 'relativedelta' - This happens if I change from lower to higher duration_months ..WHAT?
 
-    @property
     def membership_expiration(self):
         expiration_date = 'EXPIRED'
-        if self.membership_status == 'ACTIVE':
-            if self.membership_period == '12 Months':
-                duration_months = 12
-                expiration_date = self.activation_date + relativedelta(months=+duration_months)
-            elif self.membership_period == '6 Months':
-                duration_months = 6
-                expiration_date = self.activation_date + relativedelta(months=+duration_months)
-            else:
-                duration_months = 3
-                expiration_date = self.activation_date + relativedelta(months=+duration_months)
+        if self.activation_date is not None:
+            if self.membership_status == 'ACTIVE':
+           
+                if self.membership_period == '12 Months':
+                    duration_months = 12
+                    expiration_date = self.activation_date + relativedelta(months=+duration_months)
+                elif self.membership_period == '6 Months':
+                    duration_months = 6
+                    expiration_date = self.activation_date + relativedelta(months=+duration_months)
+                elif self.membership_period == '1 Month':
+                    duration_months = 3
+                    expiration_date = self.activation_date + relativedelta(months=+duration_months)
+                else:
+                    duration_months = 1
+                    expiration_date = self.activation_date + relativedelta(months=+duration_months)
 
             if self.autorenew_membership:
                 new_expiration_date = expiration_date + relativedelta(months=+duration_months)
                 if expiration_date == date.today():
                     expiration_date = new_expiration_date
-
+        else:
+            self.membership_status = 'INACTIVE'
+            self.save()
         return expiration_date
 
 
@@ -213,7 +233,7 @@ class Posts(models.Model):
     created_on = models.DateField(blank="True", null=True, validators=[MaxValueValidator(limit_value=date.today)])
     content = models.TextField()
 
-    posts = models.ForeignKey(Student, null=True, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, null=True, on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['created_on']
@@ -221,3 +241,44 @@ class Posts(models.Model):
 
     def __str__(self):
         return '%s' % self.category
+
+
+### Documents
+def file_location(instance, filename, **kwargs):
+    filename = hashlib.md5(str(instance.file.name).encode()).hexdigest() + settings.os.path.splitext(filename)[1] 
+    return 'user_{0}/{1}'.format(instance.student.user, filename)
+
+
+    # filename = hashlib.md5(str(instance.file.name).encode()).hexdigest() + settings.os.path.splitext(filename)[1]    
+    # new_path = settings.MEDIA_ROOT + '/docs/' + str(instance.student.user) + '/' + filename
+
+
+
+
+       
+       # file_path = 'mydocs/{filename}'.format(hashlib.md5(str(instance.file.name).encode()).hexdigest() + settings.os.path.splitext(filename)[1])
+                
+    #return new_path
+
+class Document(models.Model):
+    file = models.FileField('Document', upload_to=file_location)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+   
+
+   
+    
+   
+    def get_absolute_url(self):
+        return reverse('datatables:Document-detail', kwargs={'pk': self.pk})
+
+    def __str__(self):
+        return '%s' % self.student
+
+
+
+
+
+# def upload_location(instance, filename, **kwargs):
+#     file_path = 'profile_images/{filename}'.format(
+#         filename=hashlib.md5(str(instance.address + instance.first_name + instance.last_name).encode()).hexdigest() + settings.os.path.splitext(filename)[1])
+#     return file_path

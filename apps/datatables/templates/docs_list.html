@@ -1,0 +1,51 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}"/>
+
+    <meta charset="UTF-8">
+    <title>Docs</title>
+
+    <style>
+tr {
+   border-bottom: 1px solid #ddd;
+
+
+   padding: 15px;
+}
+ tr:hover {background-color: #f5f5f5;}
+</style>
+</head>
+<body>
+
+<div class="scrollable">
+    <table id="docs" class=table">
+
+ <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+  <thead style="text-align:center"> <!--======================| thead is after caption |-->
+    <tr>
+      <th>Files</th>
+
+    </tr>
+  </thead>
+<hr>
+  <tbody> <!--======================| tbody is after thead |-->
+  {% for docs in docs %}
+    <tr>
+        <td> {{ docs.file }} </td>       
+
+        <td><a class="btn btn-sm btn-danger"  href="{% url 'datatables:Students'  %}">Delete</a></td>
+    </tr>
+
+  {% endfor %}
+
+  </tbody>
+
+
+
+    </table>
+</div>
+
+</body>

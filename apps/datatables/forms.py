@@ -25,12 +25,16 @@ class GraduationForm(forms.ModelForm):
 
 class MembershipForm(forms.ModelForm):
     class Meta:
-        widgets = {'member_since': DateInput(), 'membership': forms.HiddenInput(), 'activation_date': DateInput(),}
+        widgets = {'member_since': DateInput(), 'membership': forms.HiddenInput(), }
         model = Membership
-        fields = '__all__'
+        exclude = ['activation_date', 'activation_counter']
 
 class PostsForm(forms.ModelForm):
     class Meta:
         widgets = {'posts': forms.HiddenInput(),'created_on': DateInput(),}
         model = Posts
-        fields = '__all__'
+        exclude = ('posts',)
+
+    def __init__(self, *args, **kwargs):
+        self.student = kwargs.pop('student')
+        super(PostsForm, self).__init__(*args, **kwargs)

@@ -23,6 +23,8 @@ urlpatterns = [
 ## Membership
     path('posts/create/<str:pk>/', PostCreate.as_view(), name='Post-create'),
     path('posts/delete/<str:pk>/', PostDelete.as_view(), name='Post-delete'),  
+## Documents
+    path('documents/detail/<str:pk>/', DocumentCreate.as_view(), name='document-detail'), 
     
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
