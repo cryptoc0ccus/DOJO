@@ -131,13 +131,14 @@
             <h5>Latest Posts</h5>
             <hr>
             <a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'datatables:Post-create' student.id %}">Create Post</a>
+            <td><a class="btn btn-sm btn-danger"  href="{% url 'datatables:Post-list' student.id %}">View All</a></td>
         
            
           </div>
         </div>
       </div>
 
-      {% include 'post_list.html' with student=student %}
+      {% include 'post_list.html' with post=post %}
 
 
 
@@ -149,6 +150,7 @@
     <div class="card card-body">
       <h5>Documents</h5>
       <hr>
+      <a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'datatables:document-upload' student.id %}">Upload file</a>
       {% include "docs_list.html" with student=student %}
     </div>
     

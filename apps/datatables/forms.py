@@ -31,10 +31,7 @@ class MembershipForm(forms.ModelForm):
 
 class PostsForm(forms.ModelForm):
     class Meta:
-        widgets = {'posts': forms.HiddenInput(),'created_on': DateInput(),}
+        widgets = {'posts': forms.HiddenInput(),'created_on': DateInput(), 'student': forms.HiddenInput(), }
         model = Posts
         exclude = ('posts',)
 
-    def __init__(self, *args, **kwargs):
-        self.student = kwargs.pop('student')
-        super(PostsForm, self).__init__(*args, **kwargs)

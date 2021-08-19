@@ -34,9 +34,9 @@ tr {
   <tbody> <!--======================| tbody is after thead |-->
   {% for docs in docs %}
     <tr>
-        <td> {{ docs.file }} </td>       
+        <td> <a href="{{ docs.file.url }}"  target="_blank"> <i class="fas fa-eye"></i> {{ docs.file }}</a> </td>       
 
-        <td><a class="btn btn-sm btn-danger"  href="{% url 'datatables:Students'  %}">Delete</a></td>
+        <td><a class="btn btn-sm btn-danger"  href="{% url 'datatables:document-delete' docs.id %}">Delete</a></td>
     </tr>
 
   {% endfor %}
@@ -49,3 +49,4 @@ tr {
 </div>
 
 </body>
+

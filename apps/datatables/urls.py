@@ -20,11 +20,14 @@ urlpatterns = [
     path('graduation/update/<str:pk>/', GraduationUpdate.as_view(), name='Graduation-update'), 
 ## Membership
     path('membership/update/<str:pk>/', MembershipUpdate.as_view(), name='Membership-update'), 
-## Membership
+## Posts
     path('posts/create/<str:pk>/', PostCreate.as_view(), name='Post-create'),
     path('posts/delete/<str:pk>/', PostDelete.as_view(), name='Post-delete'),  
+    path('posts/list/<str:pk>', PostsList.as_view(), name='Post-list'),  
 ## Documents
-    path('documents/detail/<str:pk>/', DocumentCreate.as_view(), name='document-detail'), 
+    path('documents/upload/<str:pk>/', DocumentsCreate.as_view(), name='document-upload'),
+   # path('documents/list/<str:pk>/', DocumentList.as_view(), name='document-list'), 
+    path('documents/delete/<str:pk>/', DocumentsDelete.as_view(), name='document-delete'),
     
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

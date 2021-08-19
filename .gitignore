@@ -1,3 +1,5 @@
 *.sqlite3
 *venv
 *.idea
+sent_emails
+media

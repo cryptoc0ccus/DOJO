@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Posts List</h1>
+  {% if post_list %}
+  <ul>
+    {% for posts in post_list %}
+      <li>
+        <a href="{{ posts.get_absolute_url }}">{{ posts.created_on }}</a>  ({{posts.category}}) ({{posts.content}})
+      </li>
+      <hr>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no Posts for this Student.</p>
+  {% endif %} 
+{% endblock %}
