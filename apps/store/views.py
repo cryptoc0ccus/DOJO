@@ -96,10 +96,10 @@ class CreateCheckoutSessionView(TemplateView):
         context['products'] = products
 
         success_url = self.request.build_absolute_uri(
-            reverse("djstripe_example:success")
+            reverse("store:success")
         )
 
-        cancel_url = self.request.build_absolute_uri(reverse("home"))
+        cancel_url = self.request.build_absolute_uri(reverse("store:pricing_page"))
 
         try:
             id = djstripe.settings.get_subscriber_model().objects.first().id #djstripe_settings.get_subscriber_model().objects.first().id

@@ -14,6 +14,7 @@ urlpatterns = [
         v.CreateCheckoutSessionView.as_view(),
         name="checkout",
     ),
+     path("success/", v.CheckoutSessionSuccessView.as_view(), name="success"),
      path(
         "purchase-subscription",
         v.PurchaseSubscriptionView.as_view(),
