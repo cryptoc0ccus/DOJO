@@ -3,7 +3,7 @@
 {% block content %}
 
 
-<div class="content">
+<div class="container">
     <h1>Choose your membership plan</h1>
 
     <div class="row ">
@@ -20,28 +20,57 @@
               <h5 >{{ plan.human_readable_price }}</h5>
               <div class="text-right">
                 <input type="checkbox" name="{{p.name}}" value="{{p.id}}" onclick="planSelect('{{p.name}}' ,'{{plan.human_readable_price}}', '{{plan.id}}')">
-              {% endfor %}
+                {% endfor %}
               </div>
             </div>
-          </div>
-    
+          </div>    
         </div>
-<br>
-<hr>
-
-
-
-
-
-</div>
-
-
+    </div>
+    <br>
+    <hr>
     {% endfor %}
     <div class="row ">
-        <p> payment method 1</p>
-        <p> payment method n</p>
+        <p> payment method 1 SEPA</p>
+        <p> payment method 2 CARD</p>
+        <p> payment method 3 PAYPAL</p>
         <p> BUTTON PROCEED CHECKOUT n</p>
 
     </div>
 
+</div>
+
 {% endblock %}
+
+
+{% block js %}
+<script>
+    //responsible for the checkbox thing..
+function planSelect(name, price, priceId) {
+    var inputs = document.getElementsByTagName('input');
+
+    for(var i = 0; i<inputs.length; i++){
+      inputs[i].checked = false;
+      if(inputs[i].name== name){
+
+        inputs[i].checked = true;
+      }
+    }
+
+    var n = document.getElementById('plan');
+    var p = document.getElementById('price');
+    var pid = document.getElementById('priceId');
+    n.innerHTML = name;
+    p.innerHTML = price;
+    pid.innerHTML = priceId;
+        document.getElementById("submit").disabled = false;
+
+
+  }
+
+</script>
+
+
+
+
+
+{% endblock js %}

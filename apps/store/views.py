@@ -1,6 +1,7 @@
-from apps.store.models import Customer
+#from apps.store.models import Customer
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from djstripe.models.core import Customer, Product
 from apps.accounts.decorators import *
 from django.contrib import messages
 from DOJO import settings
@@ -13,26 +14,104 @@ import djstripe
 #
 import json
 from django.http import JsonResponse
-from djstripe.models import Product
+import djstripe.models
 ##
+from django.contrib.auth import get_user_model
+###
+from django.template.response import TemplateResponse
+from django.urls import reverse
+from django.views.generic import DetailView, FormView
+from django.views.generic.base import TemplateView
+###
+
+User = get_user_model()
+stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
 
 
 
-def store_test(request):
-    products = Product.objects.all()
-    context = {}
-    customer_id = Customer.objects.get(id=1)
-    context['customer_id'] = customer_id
-    context['products'] = products
+class CreateCheckoutSessionView(TemplateView):
+    
+    template_name = "checkout.html"
 
-    return render(request, '../templates/store_test.html', context)
+    def get_context_data(self, **kwargs):
+        products = Product.objects.all()
+        #Get Parent
+        context = super().get_context_data(**kwargs)
+
+        #initialize stripe.js on the frontend
+        context['STRIPE_PUBLIC_KEY'] = settings.STRIPE_TEST_PUBLIC_KEY
+        context['products'] = products
+
+        success_url = self.request.build_absolute_uri(
+            reverse("djstripe_example:success")
+        )
+
+        cancel_url = self.request.build_absolute_uri(reverse("home"))
 
 
 
-@login_required
-def checkout(request):
-  products = Product.objects.all()
-  return render(request,"checkout.html",{"products": products})
+
+
+
+class CheckoutSessionSuccessView(TemplateView):
+
+    template_name = "checkout_success.html"
+
+# def store_test(request):
+#     products = Product.objects.all()
+#     context = {}
+#     #customer_id = Customer.objects.get(id=1)
+#     #context['customer_id'] = customer_id
+#     context['products'] = products
+
+#     return render(request, '../templates/store_test.html', context)
+
+# def payment_sepa(request):
+#     context = {}
+#     return render(request, '../templates/sepa.html', context)
+
+
+
+# @login_required
+# def create_checkout_session(request: HttpRequest):
+ 
+#     customer = Customer.objects.create() # get customer model based off request.user
+ 
+#     if request.method == 'POST':
+ 
+#         # Assign product price_id, to support multiple products you 
+#         # can include a product indicator in the incoming POST data
+#         price_id = ... # 
+ 
+#         # Set Stripe API key
+#         stripe.api_key = settings.STRIPE_SECRET_KEY
+ 
+#         # Create Stripe Checkout session
+#         checkout_session = stripe.checkout.Session.create(
+#             payment_method_types=["card, sepa"],
+#             mode="subscription",
+#             line_items=[
+#                 {
+#                     "price": price_id,
+#                     "quantity": 1
+#                 }
+#             ],
+#             customer=customer.id,
+#             success_url=f"https://YOURDOMAIN.com/payment/success?sessid={{CHECKOUT_SESSION_ID}}",
+#             cancel_url=f"https://YOURDOMAIN.com/payment/cancel", # The cancel_url is typically set to the original product page
+#         )
+ 
+#     return JsonResponse({'sessionId': checkout_session['id']})
+
+
+
+
+
+
+
+# def checkout(request):
+#   products = Product.objects.all()
+#   return render(request,"checkout.html",{"products": products})
 
 
 

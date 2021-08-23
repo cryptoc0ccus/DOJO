@@ -8,8 +8,8 @@ from django.conf.urls.static import static
 app_name = 'store'
 
 urlpatterns = [
-     path('', v.store_test, name='store-test'),
-     path("checkout", v.checkout, name="checkout"),
+#     path('', v.store_test, name='store-test'),
+#      path("checkout", v.checkout, name="checkout"),
  #    path("create-sub", v.create_sub, name="create sub"), #add
  #    path("complete", v.complete, name="complete"), #add
 

@@ -8,6 +8,8 @@ from PIL import Image
 from django.dispatch import receiver
 #from DOJO import settings
 
+from djstripe.models import Customer, Subscription
+
 
 # Create your models here.
 class AccountManager(BaseUserManager):
@@ -28,6 +30,9 @@ class AccountManager(BaseUserManager):
 
 class Account(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(verbose_name="E-Mail", max_length=60, unique=True)
+    customer = models.ForeignKey(Customer, null=True, blank=True, on_delete=models.SET_NULL)
+    subscription = models.ForeignKey(Subscription, null=True, blank=True,on_delete=models.SET_NULL)
+
 
     # Standard Stuff
     date_joined = models.DateTimeField(verbose_name="date joined", auto_now_add=True)
