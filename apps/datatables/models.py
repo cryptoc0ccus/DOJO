@@ -185,6 +185,7 @@ class Membership(models.Model):
         if created:
             membership = Membership(membership=instance)
             print('membership created')
+            membership.membership_status ='INACTIVE'
             membership.save()
     
 

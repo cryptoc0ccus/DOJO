@@ -9,5 +9,10 @@ app_name = 'core'
 
 urlpatterns = [
      path('', v.index, name='index'),
+     path('dashboard/', v.dashboard, name='dashboard'),
+     path('dashboard-admin/', v.dashboard_admin, name='dashboard-admin'),
+
     
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+

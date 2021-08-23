@@ -31,7 +31,7 @@ class StudentList(LoginRequiredMixin, ListView):
     context_object_name = 'students'
     template_name = '../templates/students.html'
 
-class StudentDetail(DetailView):
+class StudentDetail(LoginRequiredMixin, DetailView):
     model = Student
     context_object_name = 'student'
     template_name = '../templates/student_profile.html'
@@ -58,13 +58,13 @@ class StudentCreate(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
-class StudentUpdate(UpdateView):
+class StudentUpdate(LoginRequiredMixin,UpdateView):
     model = Student
     form_class = StudentForm
     success_url = reverse_lazy('datatables:Students')
     template_name = '../templates/student_form.html'
 
-class StudentDelete(DeleteView):
+class StudentDelete(LoginRequiredMixin, DeleteView):
     model = Student
     context_object_name = 'student'
     success_url = reverse_lazy('datatables:Students')
@@ -72,7 +72,7 @@ class StudentDelete(DeleteView):
 
 
 ## Graduation
-class GraduationUpdate(UpdateView):
+class GraduationUpdate(LoginRequiredMixin,UpdateView):
     model = Graduation
     form_class = GraduationForm
     context_object_name = 'graduation'
@@ -81,7 +81,7 @@ class GraduationUpdate(UpdateView):
 
     
 ## Membership
-class MembershipUpdate(UpdateView):
+class MembershipUpdate(LoginRequiredMixin, UpdateView):
     model = Membership
     form_class = MembershipForm
     context_object_name = 'membership'

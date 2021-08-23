@@ -38,12 +38,12 @@ img {
     opacity: 1;
   }
 .card {
-background-color: black !important;
+background-color: #2c085436 !important;
 }
 
 
 .card-body {
-background-color: black !important;
+background-color: #2b085415 !important;
 }
 .card-header {
 background-color: black !important;
@@ -66,7 +66,7 @@ background-color: black !important;
  .container {
 width: 100%;
 height: auto;
-background-color: black !important;
+background-color: #00000000 !important;
 margin-right: auto;
 margin-left: auto;
 color: #7ee4e4;

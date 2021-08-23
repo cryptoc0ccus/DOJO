@@ -3,6 +3,8 @@ from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.decorators import login_required
 from .forms import RegistrationForm, AccountAuthenticationForm
 from django.conf import settings
+from .decorators import *
+from django.contrib.auth.models import Group
 
 
 # Create your views here.
@@ -10,13 +12,16 @@ from django.conf import settings
 def home(request):
     return render(request, 'home.html')
 
+@unauthenticated_user
 def register_view(request):
     context = {}
     if request.POST:
         form = RegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)         
+            login(request, user)    
+            # group = Group.objects.get(name='student')  
+            # user.groups.add(group) 
             return redirect('../home')
     else:
         form = RegistrationForm()
@@ -24,10 +29,10 @@ def register_view(request):
     context['recaptcha_site_key'] = settings.GOOGLE_RECAPTCHA_SITE_KEY
     return render(request, "register.html", context)
     
-
+@unauthenticated_user
 def login_view(request):
-    if request.user.is_authenticated:
-        return redirect('../home')
+    # if request.user.is_authenticated:
+    #     return redirect('../home')
 
 
     context = {}

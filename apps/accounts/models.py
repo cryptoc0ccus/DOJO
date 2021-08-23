@@ -1,4 +1,6 @@
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin
+
 from django.db import models
 import hashlib
 from django.db.models.signals import post_save
@@ -24,7 +26,7 @@ class AccountManager(BaseUserManager):
         user.save(using=self._db)
 
 
-class Account(AbstractBaseUser):
+class Account(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(verbose_name="E-Mail", max_length=60, unique=True)
 
     # Standard Stuff
