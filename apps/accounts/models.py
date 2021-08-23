@@ -30,8 +30,8 @@ class AccountManager(BaseUserManager):
 
 class Account(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(verbose_name="E-Mail", max_length=60, unique=True)
-    customer = models.ForeignKey(Customer, null=True, blank=True, on_delete=models.SET_NULL)
-    subscription = models.ForeignKey(Subscription, null=True, blank=True,on_delete=models.SET_NULL)
+    customer = models.ForeignKey(Customer, null=True, blank=True, on_delete=models.CASCADE)
+    subscription = models.ForeignKey(Subscription, null=True, blank=True, on_delete=models.CASCADE)
 
 
     # Standard Stuff
