@@ -1,36 +1,29 @@
-from django.urls import path, reverse_lazy
-from apps.store import views as v
-from django.contrib.auth import views as auth_views
-from django.conf import settings
-from django.conf.urls.static import static
+from django.urls import path
+
+from . import views
+
 
 
 app_name = 'store'
 
 urlpatterns = [
-     path('pricing_page/', v.pricing_page, name='pricing_page'),
-     path(
+    path("pricing_page/", views.pricing_page, name='pricing_page'),
+    path(
         "checkout/",
-        v.CreateCheckoutSessionView.as_view(),
+        views.CreateCheckoutSessionView.as_view(),
         name="checkout",
     ),
-     path("success/", v.CheckoutSessionSuccessView.as_view(), name="success"),
-     path(
+    path("success/", views.CheckoutSessionSuccessView.as_view(), name="success"),
+    path(
         "purchase-subscription",
-        v.PurchaseSubscriptionView.as_view(),
+        views.PurchaseSubscriptionView.as_view(),
         name="purchase_subscription",
-     ),
-     path(
+    ),
+    path(
         "purchase-subscription-success/<id>",
-        v.PurchaseSubscriptionSuccessView.as_view(),
+        views.PurchaseSubscriptionSuccessView.as_view(),
         name="purchase_subscription_success",
-     ),
-     path("payment-intent", v.create_payment_intent, name="payment_intent"),
-
+    ),
+    path("payment-intent", views.create_payment_intent, name="payment_intent"),
     
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
-
-
-
+] 

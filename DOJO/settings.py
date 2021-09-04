@@ -174,8 +174,6 @@ GOOGLE_RECAPTCHA_SECRET_KEY = config('GOOGLE_RECAPTCHA_SECRET_KEY')
 
 GOOGLE_RECAPTCHA_SITE_KEY = config('GOOGLE_RECAPTCHA_SITE_KEY')
 
-#<script src='https://www.google.com/recaptcha/api.js'></script>
-#<div class="g-recaptcha" data-sitekey="6Lf-ae8bAAAAAAjl7J2FcI3perlSYkR6AaspqOv5"></div>
 
 
 STRIPE_TEST_PUBLIC_KEY ='pk_test_51JR01OJJBXKsbxPkPwpPtbUyxf9k394RCe8glAcLPNtbqvcFW23DERkkTJMNQy6bCVpNyD29rQThQDCtYv8eiLjW00LwbbBC29'
