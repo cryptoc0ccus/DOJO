@@ -1,4 +1,6 @@
 import hashlib
+#from hashids import Hashids
+import os
 from datetime import date
 from django.db.models.signals import post_save
 from PIL import Image
@@ -11,8 +13,17 @@ from apps.accounts.models import *
 from django.conf import settings
 from DOJO import settings
 from django.urls import reverse
-
+import uuid
 #from django.core.exceptions import
+
+from django.http import HttpResponse, HttpResponseRedirect
+
+#qrcode
+import qrcode
+from io import BytesIO
+from django.core.files import File
+from PIL import Image, ImageDraw
+from django.core.mail import send_mail
 
 
 def upload_location(instance, filename, **kwargs):
@@ -22,10 +33,18 @@ def upload_location(instance, filename, **kwargs):
 
 # Create your models here.
 class Student(models.Model):
+    id = models.UUIDField(
+         primary_key = True,
+         default = uuid.uuid4,
+         editable = False)
+    name = models.CharField(max_length=200)
+
+
+
     def __str__(self):
         return self.first_name + " " + self.last_name
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
 
     first_name = models.CharField("First name", max_length=30, default="", null=True)
     last_name = models.CharField("Last name", max_length=30, default="", null=True)    
@@ -77,6 +96,13 @@ def post_save_compress_img(sender, instance, *args, **kwargs):
 
 ## Graduation
 class Graduation(models.Model):
+    id = models.UUIDField(
+         primary_key = True,
+         default = uuid.uuid4,
+         editable = False)
+
+
+
     BELT_SELECTOR = (
         ('WHITE', 'WHITE'),
         ('BLUE', 'BLUE'),
@@ -119,6 +145,12 @@ from dateutil.relativedelta import relativedelta
 from django.core.validators import MaxValueValidator
 
 class Membership(models.Model):
+    id = models.UUIDField(
+         primary_key = True,
+         default = uuid.uuid4,
+         editable = False)
+
+
     member_since = models.DateField("Member since", blank=False, null=True,
                                     validators=[MaxValueValidator(limit_value=date.today)])
     autorenew_membership = models.BooleanField(default=True)
@@ -153,6 +185,43 @@ class Membership(models.Model):
     def __str__(self):
         return '%s' % self.membership
 
+    # QRCODE
+    qr_code = models.ImageField(upload_to='qr_codes', blank=True)
+
+
+    def save_qrcode(self, *args, **kwargs):
+        qrcode_img = qrcode.make(self.id)
+        canvas = Image.new('RGB', (340, 340), 'white')
+        draw = ImageDraw.Draw(canvas)
+        canvas.paste(qrcode_img)
+        fname = f'qr_code-{self.id}.png'
+        buffer = BytesIO()
+        canvas.save(buffer,'PNG')
+        self.qr_code.save(fname, File(buffer), save=False)
+        canvas.close()
+        super().save(args, **kwargs)
+
+        print('email sent')
+        email_subject = 'Thanks for activating your membership - Here is  your Access code'
+        email_message = 'Hello There'
+        email_from = 'no-reply@dojo.berlin'
+        email_to = self.membership
+        email_file = self.qr_code.path
+        
+
+        
+
+
+
+
+    #DELETE QR CODE
+    
+    def delete_qrcode(self):        
+        os.remove(self.qr_code.path)
+        self.qr_code.delete()
+       
+
+
 
     # Set activation date as status changes. -> Could it be done using another signal ???
 
@@ -162,9 +231,14 @@ class Membership(models.Model):
             if self.activation_counter is None:
                 self.activation_counter = 0
             self.activation_counter += 1 
-            self.activation_date = date.today()           
+            self.activation_date = date.today() 
+            #generate qrcode 
+            self.save_qrcode()         
         elif self.membership_status == 'INACTIVE' and self.activation_date is not None:
             self.activation_date = None
+            #delete qrcode
+            self.delete_qrcode()
+
             print(self.activation_counter)
             super(Membership, self).save(*args, **kwargs)
           
@@ -223,6 +297,11 @@ class Membership(models.Model):
 ## POSTS
 
 class Posts(models.Model):
+    id = models.UUIDField(
+         primary_key = True,
+         default = uuid.uuid4,
+         editable = False)
+
     SUBJECT_SELECTOR = (
         ('Technique', 'Technique'),
         ('Warning', 'Warning'),
@@ -247,21 +326,15 @@ class Posts(models.Model):
 ### Documents
 def file_location(instance, filename, **kwargs):
     filename = hashlib.md5(str(instance.file.name).encode()).hexdigest() + settings.os.path.splitext(filename)[1] 
-    return 'user_{0}/{1}'.format(instance.student.user, filename)
+    return 'files/{0}/{1}'.format(instance.student.user, filename)
 
-
-    # filename = hashlib.md5(str(instance.file.name).encode()).hexdigest() + settings.os.path.splitext(filename)[1]    
-    # new_path = settings.MEDIA_ROOT + '/docs/' + str(instance.student.user) + '/' + filename
-
-
-
-
-       
-       # file_path = 'mydocs/{filename}'.format(hashlib.md5(str(instance.file.name).encode()).hexdigest() + settings.os.path.splitext(filename)[1])
-                
-    #return new_path
+ 
 
 class Document(models.Model):
+    id = models.UUIDField(
+         primary_key = True,
+         default = uuid.uuid4,
+         editable = False)
     file = models.FileField('Document', upload_to=file_location)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
    

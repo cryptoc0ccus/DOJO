@@ -12,7 +12,9 @@ urlpatterns = [
     path('', include('apps.core.urls')),
     url(r'^accounts/', include('django.contrib.auth.urls')),
     path('students/', include('apps.datatables.urls')),
-    path('store/', include('apps.store.urls')),
-    path("stripe/", include("djstripe.urls", namespace="djstripe")),
+    path('subscription/', include('apps.subscription.urls')),
+    path('attendance/', include('apps.attendance.urls')),
+
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

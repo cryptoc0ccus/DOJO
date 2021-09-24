@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<div class="container">
+    <h1> hu hu</h1>
+    {% if cancel_at_period_end %}
+        Your membership will run to the end of billing cycle ({{end_date}}). Contact our Admin for more info.
+
+    {% elif membership %}
+        <h3>{{customerdata.user}}</h3> <br>
+        <h3>STATUS: {{status}}</h3> <br>
+        <h3>STARTING DATE: {{start_date}}</h3> <br>
+        <h3>EXPIRY DATE: {{end_date}}</h3> <br>
+        <h3>AUTOMATICALY RENEW: {{auto_renew}}</h3> <br>
+
+    <form action="{% url 'subscription:subscription' %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="cancel membership">
+    </form>
+
+    {% else %}
+
+    <a href="{% url 'subscription:terms' %}">Get Membership</a>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

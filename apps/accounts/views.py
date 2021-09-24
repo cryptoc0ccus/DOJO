@@ -44,7 +44,7 @@ def login_view(request):
 
             user = authenticate(email=email, password=password)
             login(request, user)
-            return redirect('../home')
+            return redirect('core:dashboard')
     else:
         form = AccountAuthenticationForm()
     context['form'] = form

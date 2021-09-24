@@ -30,32 +30,7 @@
     </div>
   
     <div class="col-md">
-  
-      {% if student.membership.membership_type == "GOLD" %}
-      <img class="marginauto" src="{% static '/media/dojogold.png'  %}" alt="Avatar" class="avatar-top" width="100" height="100">
-      {% elif student.membership.membership_type == "SILVER" %}
-      <img class="marginauto" src="{% static '/media/dojosilver.png'  %}" alt="Avatar" class="avatar-top" width="100" height="100">
-      {% elif student.membership.membership_type == "BRONZE" %}
-      <img class="marginauto" src="{% static '/media/dojobronze.png'  %}" alt="Avatar" class="avatar-top" width="100" height="100">
-      {% endif %}
-  
-  <!--		<img src="{% static '/media/dojowhite.svg'  %}" alt="Avatar" class="avatar-top">-->
-      <h2 align="center">Membership <span class="badge badge-bg-rod">{{ student.membership.membership_status }}</span></h3>
-
-      {% if student.membership.member_since is None %}  
-      <div style="text-align: center">
-        <a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'datatables:Membership-update' student.membership.id %}">create</a></p> 
-      </div>
-     
-      {% elif student.membership.membership_status == "ACTIVE" %}
-        <h3> Expires on: {{student.membership.membership_expiration}} </h3>
-        <a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'datatables:Membership-update' student.membership.id %}">Update</a></p> 
-      {% else %}
-        <h3> {{student.membership.membership_expiration}} </h3>
-        <a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'datatables:Membership-update' student.membership.id %}">Update</a></p> 
-        
-      {% endif %}
-  
+      <a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'subscription:subscription' %}?{{student.id}}">Subscription</a></p> 
     </div>
  
   <hr>
@@ -63,7 +38,7 @@
   </div>
 
 <br>
-<!--SECOND ROW -->
+
 
 <div class="row">
 	<div class="col-md-6">
@@ -76,7 +51,7 @@
 			<p><b>Gender:</b> {{ student.gender }} </p>
       <hr>
       {% if not student.graduation.belt  %}
-      <p><b>Graduation:</b> N/A <a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'datatables:Graduation-update' student.graduation.id %}">create</a></p>      
+      <p><b>Graduation:</b> N/A <a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'datatables:Graduation-update' student.graduation.id %}">create</a></p>            
       {% else %}
 
     

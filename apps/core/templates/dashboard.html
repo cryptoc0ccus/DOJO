@@ -3,9 +3,7 @@
 
 <div class="container">
     <h2>Your Profiles</h2>
-    <a class="btn btn-primary  btn-sm btn-block" href="{% url 'datatables:Student-create' %}">Create Profile</a>
-    <div class="row row-cols-1 row-cols-md-2 g-4">
-        
+          
         {% if not profiles %}
         <p>You don't have any profile, create a new one ?</p>
         <a class="btn btn-primary  btn-sm btn-block" href="{% url 'datatables:Student-create' %}">Create Profile</a>

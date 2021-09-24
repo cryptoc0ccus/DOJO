@@ -12,6 +12,7 @@ app_name = 'datatables'
 urlpatterns = [
     path('', StudentList.as_view(), name='Students'),
     path('profile/<str:pk>/', StudentDetail.as_view(), name='Student'),
+    #path(r'^profile/$', StudentDetail.as_view(), name='Student'),
     path('create/', StudentCreate.as_view(), name='Student-create'),
     path('update/<str:pk>/', StudentUpdate.as_view(), name='Student-update'),
     path('delete/<str:pk>/', StudentDelete.as_view(), name='Student-delete'),

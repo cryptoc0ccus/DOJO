@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class ="container">
+
+    <p> You agree with:</p>
+    <li>
+        <ul>Principles</ul>
+        <ul>Membership</ul>
+        <ul>Graduation</ul>
+    </li>
+
+    <form method="POST" action= {% url 'subscription:join' %}> 
+        {% csrf_token %}
+        <input type="checkbox" id="myterms" name="terms" required>
+        <label for="terms">I read and I agree with the terms and conditions above </label>
+        <br><br>
+    
+        <input type="submit" name="Proceed to Checkout"/>
+    </form>
+
+</div>
+
+<script>
+    function TermsSelector() {
+      var x = document.getElementById("myterms").required;    
+    }
+</script>
+
+{% endblock %}
+
+
+
+
+
+
+
+

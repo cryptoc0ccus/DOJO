@@ -39,13 +39,14 @@ INSTALLED_APPS = [
     'apps.accounts',
     'apps.core',
     'apps.datatables',
-    'apps.store',
+    'apps.subscription',
+    'apps.attendance',
     
     'widget_tweaks',
     'django_extensions',
-    'django_tables2',
-    'djstripe',
 
+
+  #  'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -179,6 +180,3 @@ GOOGLE_RECAPTCHA_SITE_KEY = config('GOOGLE_RECAPTCHA_SITE_KEY')
 STRIPE_TEST_PUBLIC_KEY ='pk_test_51JR01OJJBXKsbxPkPwpPtbUyxf9k394RCe8glAcLPNtbqvcFW23DERkkTJMNQy6bCVpNyD29rQThQDCtYv8eiLjW00LwbbBC29'
 STRIPE_TEST_SECRET_KEY = 'sk_test_51JR01OJJBXKsbxPkNGdWryMhrnATm1TlkNroOUoGDa91UUIo5RvCIY7I6PMYQgRxFWnrLYHRksHwBJYUh43EcBww00wCQ8y8Sa'
 STRIPE_LIVE_MODE = False  # Change to True in production
-DJSTRIPE_WEBHOOK_SECRET = "whsec_xxx"
-DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"
-DJSTRIPE_USE_NATIVE_JSONFIELD = True

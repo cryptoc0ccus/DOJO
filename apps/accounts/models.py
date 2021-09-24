@@ -7,12 +7,16 @@ from django.db.models.signals import post_save
 from PIL import Image
 from django.dispatch import receiver
 #from DOJO import settings
-
-from djstripe.models import Customer, Subscription
+import uuid
+#from djstripe.models import Customer, Subscription
 
 
 # Create your models here.
 class AccountManager(BaseUserManager):
+    id = models.UUIDField(
+         primary_key = True,
+         default = uuid.uuid4,
+         editable = False)
 
     def create_user(self, email, password):
         user = self.model(email=email)
@@ -29,9 +33,14 @@ class AccountManager(BaseUserManager):
 
 
 class Account(AbstractBaseUser, PermissionsMixin):
+    id = models.UUIDField(
+         primary_key = True,
+         default = uuid.uuid4,
+         editable = False)
+
     email = models.EmailField(verbose_name="E-Mail", max_length=60, unique=True)
-    customer = models.ForeignKey(Customer, null=True, blank=True, on_delete=models.CASCADE)
-    subscription = models.ForeignKey(Subscription, null=True, blank=True, on_delete=models.CASCADE)
+   # customer = models.ForeignKey(Customer, null=True, blank=True, on_delete=models.CASCADE)
+   # subscription = models.ForeignKey(Subscription, null=True, blank=True, on_delete=models.CASCADE)
 
 
     # Standard Stuff
