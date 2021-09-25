@@ -37,7 +37,7 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', default=[], cast=Csv())
 
 INSTALLED_APPS = [   
     'apps.accounts',
-    'apps.core',
+#    'apps.core',
     'apps.datatables',
     'apps.subscription',
     'apps.attendance',
