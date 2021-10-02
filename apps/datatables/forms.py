@@ -12,7 +12,7 @@ class StudentForm(forms.ModelForm):
         widgets = {'birth_date': DateInput(), 'user': forms.HiddenInput()}
         model = Student
         #fields = '__all__'
-        exclude = ('user',)
+        exclude = ('user', 'qr_code')
 
 
 class GraduationForm(forms.ModelForm):

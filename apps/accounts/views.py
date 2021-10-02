@@ -46,7 +46,7 @@ def register_view(request):
             login(request, user)    
             # group = Group.objects.get(name='student')  
             # user.groups.add(group) 
-            return redirect('../home')
+            return redirect('../')
     else:
         form = RegistrationForm()
     context['form'] = form
@@ -55,8 +55,8 @@ def register_view(request):
     
 @unauthenticated_user
 def login_view(request):
-    # if request.user.is_authenticated:
-    #     return redirect('../home')
+    if request.user.is_authenticated:
+        return redirect('../')
 
 
     context = {}

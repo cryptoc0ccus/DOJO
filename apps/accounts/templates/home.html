@@ -51,8 +51,8 @@
 
 <div class="container-fluid">
     
-<h2>Responsive Column Cards</h2>
-<p>Resize the browser window to see the effect.</p>
+<h2>Your Account</h2>
+<p>Choose one option below</p>
 
 <div class="row">
   <div class="column">
@@ -85,9 +85,13 @@
     <div class="card">
       <h3>Your Subscription</h3>
       {% if has_subscription %}
-      <p>Something</p>
+      <div class="w3-section">
+        <a class="btn btn-primary  btn-sm btn-block" href="{% url 'subscription:subscription' %}">View Details</a>
+      </div>
       {% else %}
-      <p>Some text1</p>
+      <div class="w3-section">
+        <a class="btn btn-primary  btn-sm btn-block" href="{% url 'subscription:terms' %}">Create</a>
+      </div>
       {% endif %}
     </div>
   </div>
@@ -96,9 +100,12 @@
     <div class="card">
       <h3>QR Access Code</h3>
       {% if has_qr_code %}
-      <p>Some text</p>
+      <div class="w3-section">
+        <a class="btn btn-primary  btn-sm btn-block" href="{% url 'attendance:display-qrcode' %}">Display</a>
+      </div>
+     
       {% else %}
-      <p>Some text</p>
+      <p>No QR CODE Available. Subscribe or contact our Admin</p>
       {% endif %}
     </div>
   </div>

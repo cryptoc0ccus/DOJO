@@ -10,7 +10,7 @@ from django.conf.urls.static import static
 app_name = 'attendance'
 
 urlpatterns = [
-   path('', v.createqrcode, name='create-qrcode'),   
+   path('qrcode/', v.displayqrcode, name='display-qrcode'),   
    path('testhash/<str:pk>/', v.rendertesthash, name='rendertesthash'),
     
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

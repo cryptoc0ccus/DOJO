@@ -269,6 +269,8 @@ def checkout_sepa(request):
         print('here', customer.user.id)
         print('here', customer.id)
 
+        customer.user.student.save_qrcode()
+
         
         #return redirect('core:index')
         return redirect('datatables:Student', customer.user.student.id)# TEST HERE

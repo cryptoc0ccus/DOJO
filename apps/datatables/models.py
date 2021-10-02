@@ -66,6 +66,9 @@ class Student(models.Model):
         blank=True)
     profile_img = models.ImageField(upload_to=upload_location, null=True, blank=True,  default = '../media/profile_images/no-img.png')
 
+    # QRCODE
+    qr_code = models.ImageField(upload_to='qr_codes', blank=True)
+
     def get_absolute_url(self):
         return reverse('datatables:Student', kwargs={'pk': self.pk})
 
@@ -85,12 +88,42 @@ class Student(models.Model):
   #  hashlib
 
 
+    def save_qrcode(self, *args, **kwargs):
+        qrcode_img = qrcode.make(self.id)
+        canvas = Image.new('RGB', (340, 340), 'white')
+        draw = ImageDraw.Draw(canvas)
+        canvas.paste(qrcode_img)
+        fname = f'qr_code-{self.id}.png'
+        buffer = BytesIO()
+        canvas.save(buffer,'PNG')
+        self.qr_code.save(fname, File(buffer), save=False)
+        canvas.close()
+        super().save(args, **kwargs)
+
+        print('email sent')
+        email_subject = 'Thanks for activating your membership - Here is  your Access code'
+        email_message = 'Hello There'
+        email_from = 'no-reply@dojo.berlin'
+        email_to = self.membership
+        email_file = self.qr_code.path
+
+    #DELETE QR CODE
+    
+    def delete_qrcode(self):        
+        os.remove(self.qr_code.path)
+        self.qr_code.delete()
+       
+
+
 
 @receiver(post_save, sender=Student)
 def post_save_compress_img(sender, instance, *args, **kwargs):
     if instance.profile_img:
         picture = Image.open(instance.profile_img.path)
         picture.save(instance.profile_img.path, optimize=True, quality=30)
+
+
+
 
 
 
@@ -185,41 +218,7 @@ class Membership(models.Model):
     def __str__(self):
         return '%s' % self.membership
 
-    # QRCODE
-    qr_code = models.ImageField(upload_to='qr_codes', blank=True)
-
-
-    def save_qrcode(self, *args, **kwargs):
-        qrcode_img = qrcode.make(self.id)
-        canvas = Image.new('RGB', (340, 340), 'white')
-        draw = ImageDraw.Draw(canvas)
-        canvas.paste(qrcode_img)
-        fname = f'qr_code-{self.id}.png'
-        buffer = BytesIO()
-        canvas.save(buffer,'PNG')
-        self.qr_code.save(fname, File(buffer), save=False)
-        canvas.close()
-        super().save(args, **kwargs)
-
-        print('email sent')
-        email_subject = 'Thanks for activating your membership - Here is  your Access code'
-        email_message = 'Hello There'
-        email_from = 'no-reply@dojo.berlin'
-        email_to = self.membership
-        email_file = self.qr_code.path
-        
-
-        
-
-
-
-
-    #DELETE QR CODE
     
-    def delete_qrcode(self):        
-        os.remove(self.qr_code.path)
-        self.qr_code.delete()
-       
 
 
 
