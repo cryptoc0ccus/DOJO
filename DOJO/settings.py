@@ -72,11 +72,16 @@ LOGIN_REDIRECT_URL = 'accounts:home'
 ROOT_URLCONF = 'DOJO.urls'
 
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
-EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend" # 'filebased -> smtp
-#EMAIL_PORT = 587
-#EMAIL_USE_TLS= True
-#EMAIL_HOST_USER = 'dojobot@dojo.berlin
-#EMAIL_HOST_PASSWORD 
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend" # 'filebased -> smtp
+
+
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT', cast=int)
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+
+
 
 
 

@@ -23,7 +23,7 @@ import qrcode
 from io import BytesIO
 from django.core.files import File
 from PIL import Image, ImageDraw
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 
 
 def upload_location(instance, filename, **kwargs):
@@ -102,10 +102,23 @@ class Student(models.Model):
 
         print('email sent')
         email_subject = 'Thanks for activating your membership - Here is  your Access code'
-        email_message = 'Hello There'
-        email_from = 'no-reply@dojo.berlin'
-        email_to = self.membership
+        email_message = """ Hello %s ! 
+                        Thanks for subscribing !
+                        Please keep this QR Code all the time with you, this is the only way to verify your attendance at the Dojo! 
+                        See you on the mat !
+                        """%self.first_name
+        email_from = 'noreply@bjj.berlin'
+        email_to = [self.user.email]
         email_file = self.qr_code.path
+
+        qr_mail = EmailMessage(
+                                email_subject, 
+                                email_message, 
+                                email_from, 
+                                email_to, 
+                                )
+        qr_mail.attach_file(email_file)
+        qr_mail.send()
 
     #DELETE QR CODE
     

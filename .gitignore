@@ -3,3 +3,4 @@
 *.idea
 sent_emails
 media
+.env
