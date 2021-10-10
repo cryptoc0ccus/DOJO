@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     
     'widget_tweaks',
     'django_extensions',
+    'django_q',
 
 
   #  'django.contrib.sites',
@@ -58,6 +59,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "django_require_login.middleware.LoginRequiredMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -67,7 +69,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 LOGIN_URL = 'accounts:user_login'
+LOGOUT_REDIRECT_URL = 'accounts:user_login'
 LOGIN_REDIRECT_URL = 'accounts:home'
+REQUIRE_LOGIN_PUBLIC_NAMED_URLS = (LOGIN_URL, LOGOUT_REDIRECT_URL)
 
 ROOT_URLCONF = 'DOJO.urls'
 
@@ -185,3 +189,11 @@ GOOGLE_RECAPTCHA_SITE_KEY = config('GOOGLE_RECAPTCHA_SITE_KEY')
 STRIPE_TEST_PUBLIC_KEY ='pk_test_51JR01OJJBXKsbxPkPwpPtbUyxf9k394RCe8glAcLPNtbqvcFW23DERkkTJMNQy6bCVpNyD29rQThQDCtYv8eiLjW00LwbbBC29'
 STRIPE_TEST_SECRET_KEY = 'sk_test_51JR01OJJBXKsbxPkNGdWryMhrnATm1TlkNroOUoGDa91UUIo5RvCIY7I6PMYQgRxFWnrLYHRksHwBJYUh43EcBww00wCQ8y8Sa'
 STRIPE_LIVE_MODE = False  # Change to True in production
+
+
+# Configure your Q cluster
+# More details https://django-q.readthedocs.io/en/latest/configure.html
+Q_CLUSTER = {
+    "name": "DOJO",
+    "orm": "default",  # Use Django's ORM + database for broker
+}

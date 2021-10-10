@@ -13,7 +13,7 @@
 			<form action="{% url 'datatables:Student-delete' student.id  %}" method="POST">
 				
 				{% csrf_token %}
-				<a class="btn btn-warning" href="{% url 'datatables:Students' %}">Cancel</a>
+				<a class="btn btn-warning" href="{% url 'accounts:home' %}">Cancel</a>
 
 				<input class="btn btn-danger" type="submit" name="Confirm">
 			</form>

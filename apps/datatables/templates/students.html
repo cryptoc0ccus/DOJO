@@ -76,7 +76,6 @@
                 <th>Age</th>
                 <th>Belt</th>
                 <th>Membership Status</th>
-                <th>Membership Type</th>
                 <th>Member Since</th>
                 <th>Expiration Date</th>
                 <th></th>
@@ -93,10 +92,9 @@
                   <td>{{ student.gender }}</td>
                   <td>{{ student.age }}</td>
                   <th>{{ student.graduation.belt }}</th>
-                  <th>{{ student.membership.membership_status }}</th>
-                  <th>{{ student.membership.membership_type }}</th>
-                  <th>{{ student.membership.member_since }}</th>
-                  <th>{{ student.membership_member_since }}</th>
+                  <th>{{ student.membership.is_active }}</th>
+                  <th>{{ student.membership.activation_date }}</th>
+                  <th>{{ student.membership.expiry_date }}</th>
     
                   <td><a class="btn btn-sm btn-danger"  href="{% url 'datatables:Student-delete' student.id %}">Delete</a></td>
                 </tr>

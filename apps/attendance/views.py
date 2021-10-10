@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 # import qrcode.image.svg
 # from io import BytesIO
 
-@login_required
+
 def displayqrcode(request):
     qr_code = request.user.student.qr_code
     context = {'qr_code' :qr_code}

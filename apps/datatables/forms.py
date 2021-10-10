@@ -12,7 +12,7 @@ class StudentForm(forms.ModelForm):
         widgets = {'birth_date': DateInput(), 'user': forms.HiddenInput()}
         model = Student
         #fields = '__all__'
-        exclude = ('user', 'qr_code')
+        exclude = ('user', 'qr_code', 'is_kid', 'is_teen')
 
 
 class GraduationForm(forms.ModelForm):
@@ -25,7 +25,7 @@ class GraduationForm(forms.ModelForm):
 
 class MembershipForm(forms.ModelForm):
     class Meta:
-        widgets = {'member_since': DateInput(), 'membership': forms.HiddenInput(), }
+        widgets = {'member_since': DateInput(), 'expiry_date': DateInput(), 'student': forms.HiddenInput(), }
         model = Membership
         exclude = ['activation_date', 'activation_counter']
 

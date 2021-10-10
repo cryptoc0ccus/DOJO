@@ -1,5 +1,5 @@
 from .views import *
-from django.urls import path, reverse_lazy
+from django.urls import path, re_path
 from apps.datatables import views as v
 
 
@@ -21,6 +21,8 @@ urlpatterns = [
     path('graduation/update/<str:pk>/', GraduationUpdate.as_view(), name='Graduation-update'), 
 ## Membership
     path('membership/update/<str:pk>/', MembershipUpdate.as_view(), name='Membership-update'), 
+     path('membership/display/<str:pk>/', MembershipDisplay.as_view(), name='Membership-display'), 
+
 ## Posts
     path('posts/create/<str:pk>/', PostCreate.as_view(), name='Post-create'),
     path('posts/delete/<str:pk>/', PostDelete.as_view(), name='Post-delete'),  
@@ -29,6 +31,9 @@ urlpatterns = [
     path('documents/upload/<str:pk>/', DocumentsCreate.as_view(), name='document-upload'),
    # path('documents/list/<str:pk>/', DocumentList.as_view(), name='document-list'), 
     path('documents/delete/<str:pk>/', DocumentsDelete.as_view(), name='document-delete'),
+
+## QR CODE
+    path('qrcode/', v.manage_qrcode, name='manage_qrcode'),
     
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

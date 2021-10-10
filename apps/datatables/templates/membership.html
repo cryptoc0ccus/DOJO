@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static%}
+
+{% block content %}
+
+<div class="container">
+
+<h2> Member since: {{membership.member_since}} </h2>
+
+<h2> Expiry date: {{membership.expiry_date}} </h2>
+
+{% if membership.is_active %}
+<h2>ACTIVE</h2>
+{% else %}
+<h2>INACTIVE</h2>
+{% endif %}
+
+</div>
+
+
+
+
+{% endblock %}

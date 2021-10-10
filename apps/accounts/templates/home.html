@@ -74,7 +74,7 @@
       <div class="w3-section">
         <a class="btn btn-primary  btn-sm btn-block" href="{% url 'datatables:Student-create' %}">Create Profile</a>
       </div>
-        <p>Some  other text</p>
+        <p>This is your first task</p>
         
       {% endif %}
       
@@ -88,11 +88,22 @@
       <div class="w3-section">
         <a class="btn btn-primary  btn-sm btn-block" href="{% url 'subscription:subscription' %}">View Details</a>
       </div>
+      {% elif has_free_subscription %}
+      <div class="w3-section">
+        <a class="btn btn-primary  btn-sm btn-block" href="{% url 'datatables:Membership-display' user.student.membership.id %}">View Details</a>
+      </div>
+      {% else %}
+      {% if not has_profile %}
+      <h2>Create a Profile first</h2>
       {% else %}
       <div class="w3-section">
         <a class="btn btn-primary  btn-sm btn-block" href="{% url 'subscription:terms' %}">Create</a>
       </div>
       {% endif %}
+      {% endif %}
+
+
+
     </div>
   </div>
   

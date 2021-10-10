@@ -31,8 +31,16 @@
   
 
  
+ 
   <hr>
   
+  {% if request.user.is_superuser %}
+  <p><b>Create QR CODE</b> <a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'datatables:manage_qrcode'%}?studentid={{ student.id }}">Do it</a> </p>
+  <p><b>Create Membership</b> <a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'datatables:Membership-update' student.membership.id %}">Do it</a> </p>
+  {% endif %}
+
+
+
   </div>
 
 <br>
@@ -48,15 +56,11 @@
 			<p><b>Age:</b> {{ student.age }}</p>
 			<p><b>Gender:</b> {{ student.gender }} </p>
       <hr>
-      {% if not student.graduation.belt  %}
-      <p><b>Graduation:</b> N/A <a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'datatables:Graduation-update' student.graduation.id %}">create</a></p>            
-      {% else %}
+      {% if request.user.is_superuser %}
+        <p><b>Graduation:</b> <a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'datatables:Graduation-update' student.graduation.id %}">Update</a> </p>
+      {% endif %}
 
-    
-      <p><b>Graduation:</b> <a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'datatables:Graduation-update' student.graduation.id %}">Update</a> </p>
-
-
-     
+      {% if student.graduation.belt  %}
 
       <div class="container">
         <div class="row align-items-start">
@@ -90,8 +94,9 @@
       </div>
      
       
-        
-        
+      {% else %}
+
+      <h2>No Graduation available, please contact the admin</h2>        
       
 
       {% endif %}
@@ -103,7 +108,9 @@
           <div class="card card-body">
             <h5>Latest Posts</h5>
             <hr>
+            {% if request.user.is_superuser %}
             <a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'datatables:Post-create' student.id %}">Create Post</a>
+            {% endif %}
             <td><a class="btn btn-sm btn-danger"  href="{% url 'datatables:Post-list' student.id %}">View All</a></td>
         
            

@@ -4,26 +4,26 @@ from django.views.generic import View
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 from django.urls import reverse_lazy
 from django.template import Context, Template, context
 
+from django.shortcuts import render, get_object_or_404, redirect, reverse
 
-from django.shortcuts import render
 
 from .models import *
 from .forms import *
 
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
-from django.shortcuts import get_object_or_404
 
 import datetime
 from django.contrib import messages
 
-
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.models import Group
 
 #render out the template
 class StudentList(LoginRequiredMixin, ListView):
@@ -54,6 +54,9 @@ class StudentCreate(LoginRequiredMixin, CreateView):
     context_object_name = 'student'
     template_name = '../templates/student_form.html'
 
+    def get_success_url(self, **kwargs):        
+        return reverse_lazy("datatables:Student", args=(self.object.pk,))
+
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
@@ -61,48 +64,80 @@ class StudentCreate(LoginRequiredMixin, CreateView):
 class StudentUpdate(LoginRequiredMixin,UpdateView):
     model = Student
     form_class = StudentForm
-    success_url = reverse_lazy('datatables:Students')
+  #  success_url = reverse_lazy('datatables:Students')
     template_name = '../templates/student_form.html'
+
+    def get_success_url(self, **kwargs):        
+        return reverse_lazy("datatables:Student", args=(self.object.pk,))
 
 class StudentDelete(LoginRequiredMixin, DeleteView):
     model = Student
     context_object_name = 'student'
-    success_url = reverse_lazy('datatables:Students')
+    success_url = reverse_lazy('accounts:home')
     template_name = '../templates/delete.html'
 
 
 ## Graduation
-class GraduationUpdate(LoginRequiredMixin,UpdateView):
+class GraduationUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Graduation
     form_class = GraduationForm
     context_object_name = 'graduation'
     success_url = reverse_lazy('datatables:Students')
     template_name = '../templates/student_form.html'
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='superuser').exists()
+    
+    def handle_no_permission(self):
+        return redirect('accounts:home')
+
     
 ## Membership
-class MembershipUpdate(LoginRequiredMixin, UpdateView):
+
+
+
+
+class MembershipUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Membership
     form_class = MembershipForm
     context_object_name = 'membership'
     #success_url = reverse_lazy('datatables:Students')
     template_name = '../templates/student_form.html'
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='superuser').exists()
+    
+    def handle_no_permission(self):
+        return redirect('accounts:home')
+
     def get_success_url(self, **kwargs):        
-        return reverse_lazy("datatables:Student", args=(self.object.membership_id,))
+        return reverse_lazy("datatables:Student", args=(self.object.student_id,))
 
     def form_valid(self, form):        
-        self.object.membership.membership.save_timestamp()
+        self.object.save_timestamp()
         self.object = form.save()
         return super().form_valid(form)
         
+class MembershipDisplay(LoginRequiredMixin, DetailView):
+    model = Membership
+    context_object_name = 'membership'
+    #success_url = reverse_lazy('datatables:Students')
+    template_name = '../templates/membership.html'
+
+
 
 ############### Finally working - FIXME: stopped working again
-class PostCreate(CreateView):
+class PostCreate(CreateView, UserPassesTestMixin):
     model = Posts
     form_class = PostsForm
     context_object_name = 'posts'
     template_name = '../templates/student_form.html'
+
+    def test_func(self):
+        return self.request.user.groups.filter(name='superuser').exists()
+    
+    def handle_no_permission(self):
+        return redirect('accounts:home')
 
     def get_success_url(self, **kwargs):        
         return reverse_lazy("datatables:Student", args=(self.object.student_id,))
@@ -124,6 +159,8 @@ class PostCreate(CreateView):
         self.student.save()
         initial['student'] = self.student # A little workaround
         return initial
+
+
  
 
 class PostsList(ListView):
@@ -136,11 +173,22 @@ class PostsList(ListView):
         return Posts.objects.filter(student_id=self.kwargs.get('pk'))
 
 
-class PostDelete(DeleteView):
+class PostDelete(DeleteView, UserPassesTestMixin):
     model = Posts
     context_object_name = 'post'
-    success_url = reverse_lazy('datatables:Students')
+   # success_url = reverse_lazy('datatables:Students')
     template_name = '../templates/delete.html'
+
+    def test_func(self):
+        return self.request.user.groups.filter(name='superuser').exists()
+    
+    def handle_no_permission(self):
+        return redirect('accounts:home')
+    
+    def get_success_url(self, **kwargs):        
+        return reverse_lazy("datatables:Student", args=(self.object.student_id,))
+
+    
 
 
 ## Documents
@@ -175,3 +223,27 @@ class DocumentsDelete(DeleteView):
     context_object_name = 'docs'
     success_url = reverse_lazy('datatables:Students')
     template_name = '../templates/delete.html'
+
+
+
+
+@user_passes_test(lambda u: Group.objects.get(name='superuser') in u.groups.all())
+def manage_qrcode(request):
+    student_id = request.GET.get('studentid')
+
+    if request.method == 'GET': 
+
+        if 'select' in request.GET:
+            qrcodestudent = Student.objects.get(id=student_id)
+            if request.GET['select'] == 'create':
+                          
+                qrcodestudent.save_qrcode()
+                print('code is saved', qrcodestudent)
+            if request.GET['select'] == 'delete':
+                qrcodestudent.delete_qrcode()
+                print('here we are 3')
+    
+            return redirect('datatables:Student', student_id)             
+
+
+    return render(request, 'manage_qrcode.html', {'student' :student_id })

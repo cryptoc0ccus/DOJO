@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 #from .forms import CustomSignupForm
@@ -122,6 +122,7 @@ def checkout(request):
         customer.cancel_at_period_end = False
         customer.stripe_subscription_id = subscription.id
         customer.save()
+        customer.user.student.save_qrcode()
 
 
         #return redirect('core:index')
@@ -268,6 +269,16 @@ def checkout_sepa(request):
         print('here', customer)
         print('here', customer.user.id)
         print('here', customer.id)
+        #Update membership class
+        customer.user.student.membership.is_active = True
+        customer.user.student.membership.auto_renew = True
+    #    customer.user.student.membership.activation_date = date.today()
+        customer.user.student.membership.expiry_date = end_date
+        customer.user.student.membership.save_timestamp()
+        customer.user.student.membership.save()
+
+
+
 
         customer.user.student.save_qrcode()
 

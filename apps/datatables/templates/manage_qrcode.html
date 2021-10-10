@@ -1,0 +1,16 @@
+{%  extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<br>
+<div class="card mb-4 shadow-sm">
+    <div class="card-header">
+      <h4 class="my-0 font-weight-normal">Create or Delete QR Code ?</h4>
+    </div>
+    <div class="card-body">
+      
+      <a href="{% url 'datatables:manage_qrcode'%}?select=create&studentid={{ student }}"><button type="button" class="btn btn-lg btn-block btn-primary">Create</button></a>
+      <a href="{% url 'datatables:manage_qrcode'%}?select=delete&studentid={{ student }}"><button type="button" class="btn btn-lg btn-block btn-secondary">Delete</button></a>
+    </div>
+  </div>
+{% endblock %}
