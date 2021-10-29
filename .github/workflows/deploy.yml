@@ -1,0 +1,42 @@
+---
+name: Deploy Djano App
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Copy files
+        uses: appleboy/scp-action@master
+        with:
+          host: apus.uberspace.de
+          username: dojo
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "./"
+          target: "/home/dojo/django-app"
+
+      # - name:
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: apus.uberspace.de
+      #     username: dojo
+      #     key: ${{ secrets.SSH_PRIVATE_KEY }}
+      #     script: |
+      #       export CMS_ADMIN_PASSWORD="${{ secrets.CMS_ADMIN_PASSWORD }}"
+      #       export CMS_DB_PASSWORD="${{ secrets.CMS_DB_PASSWORD }}"
+      #       export CMS_KEY="${{ secrets.CMS_KEY }}"
+      #       export CMS_SECRET="${{ secrets.CMS_SECRET }}"
+      #       export EMAIL_PASS="${{ secrets.EMAIL_PASS }}"
+      #       export NOCODB_DB_PASSWORD="${{ secrets.NOCODB_DB_PASSWORD }}"
+      #       export NOCODB_TOKEN="${{ secrets.NOCODB_TOKEN }}"
+      #       export UMAMI_DB_PASSWORD="${{ secrets.UMAMI_DB_PASSWORD }}"
+      #       export UMAMI_HASH_SALT="${{ secrets.UMAMI_HASH_SALT }}"
+      #       docker-compose -f /srv/bvpk/docker-compose.yml pull
+      #       docker-compose -f /srv/bvpk/docker-compose.yml up -d
