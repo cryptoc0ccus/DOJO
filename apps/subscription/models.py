@@ -15,6 +15,9 @@ class Customer(models.Model):
     stripe_subscription_id = models.CharField(max_length=255)
     cancel_at_period_end = models.BooleanField(default=False)
     membership = models.BooleanField(default=False)
+    last4 = models.CharField(max_length=4, null=True)
+    mandate_ref = models.CharField(max_length=20, null=True)
+    plan = models.CharField(max_length=20, null=True)
 
     def __str__(self):
         return str(self.user)

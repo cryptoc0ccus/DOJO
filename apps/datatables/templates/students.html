@@ -78,6 +78,7 @@
                 <th>Membership Status</th>
                 <th>Member Since</th>
                 <th>Expiration Date</th>
+                <th>Auto Renew</th>
                 <th></th>
               </tr>
             </thead>
@@ -95,6 +96,7 @@
                   <th>{{ student.membership.is_active }}</th>
                   <th>{{ student.membership.activation_date }}</th>
                   <th>{{ student.membership.expiry_date }}</th>
+                  <th>{{ student.membership.autorenew_membership }}</th>
     
                   <td><a class="btn btn-sm btn-danger"  href="{% url 'datatables:Student-delete' student.id %}">Delete</a></td>
                 </tr>

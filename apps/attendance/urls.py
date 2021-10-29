@@ -11,7 +11,8 @@ app_name = 'attendance'
 
 urlpatterns = [
    path('qrcode/', v.displayqrcode, name='display-qrcode'),   
-   path('testhash/<str:pk>/', v.rendertesthash, name='rendertesthash'),
+   path('contact/', v.contactView, name='contact'),
+   path('success/', v.successView, name='success'),
     
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -1,15 +1,11 @@
-from django.http.response import HttpResponseRedirect
-from django.urls.base import reverse
-from django.views.generic import View
+
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import UserPassesTestMixin
 
 from django.urls import reverse_lazy
-from django.template import Context, Template, context
-
-from django.shortcuts import render, get_object_or_404, redirect, reverse
+from django.shortcuts import render, get_object_or_404, redirect
 
 
 from .models import *
@@ -25,8 +21,12 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import Group
 
+
+
+
+
 #render out the template
-class StudentList(LoginRequiredMixin, ListView):
+class StudentList(ListView):
     model = Student
     context_object_name = 'students'
     template_name = '../templates/students.html'
@@ -48,7 +48,9 @@ class StudentDetail(LoginRequiredMixin, DetailView):
 
         return context
 
-class StudentCreate(LoginRequiredMixin, CreateView):
+
+
+class StudentCreate(CreateView):
     model = Student
     form_class = StudentForm
     context_object_name = 'student'
@@ -61,16 +63,20 @@ class StudentCreate(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
-class StudentUpdate(LoginRequiredMixin,UpdateView):
+
+
+class StudentUpdate(UpdateView):
     model = Student
     form_class = StudentForm
   #  success_url = reverse_lazy('datatables:Students')
+    
     template_name = '../templates/student_form.html'
 
     def get_success_url(self, **kwargs):        
+        messages.success(self.request, 'Student Profile updated sucessfully') 
         return reverse_lazy("datatables:Student", args=(self.object.pk,))
 
-class StudentDelete(LoginRequiredMixin, DeleteView):
+class StudentDelete(DeleteView):
     model = Student
     context_object_name = 'student'
     success_url = reverse_lazy('accounts:home')
@@ -78,7 +84,7 @@ class StudentDelete(LoginRequiredMixin, DeleteView):
 
 
 ## Graduation
-class GraduationUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class GraduationUpdate(UserPassesTestMixin, UpdateView):
     model = Graduation
     form_class = GraduationForm
     context_object_name = 'graduation'
@@ -92,12 +98,10 @@ class GraduationUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return redirect('accounts:home')
 
     
+
 ## Membership
 
-
-
-
-class MembershipUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class MembershipUpdate(UserPassesTestMixin, UpdateView):
     model = Membership
     form_class = MembershipForm
     context_object_name = 'membership'
@@ -118,7 +122,7 @@ class MembershipUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         self.object = form.save()
         return super().form_valid(form)
         
-class MembershipDisplay(LoginRequiredMixin, DetailView):
+class MembershipDisplay(DetailView):
     model = Membership
     context_object_name = 'membership'
     #success_url = reverse_lazy('datatables:Students')
@@ -126,7 +130,8 @@ class MembershipDisplay(LoginRequiredMixin, DetailView):
 
 
 
-############### Finally working - FIXME: stopped working again
+############### Finally working - 
+# FIXME: stopped working again
 class PostCreate(CreateView, UserPassesTestMixin):
     model = Posts
     form_class = PostsForm
@@ -150,7 +155,7 @@ class PostCreate(CreateView, UserPassesTestMixin):
     def form_valid(self, form):
         self.student = get_object_or_404(Student, pk=self.kwargs['pk'])
         form.instance.student = self.student
-        messages.success(self.request, 'The city has been added to the list of visited places, thank you') 
+        
         return super().form_valid(form)
 
     def get_initial(self, *args, **kwargs):
@@ -205,12 +210,7 @@ class DocumentsCreate(CreateView):
     def form_valid(self, form):
         self.student = get_object_or_404(Student, pk=self.kwargs['pk'])
         form.instance.student = self.student 
-        # obj = form.save(commit=False)
-        # if self.request.FILES:
-        #     for f in self.request.FILES.getlist('file'):
-        #         obj = self.model.objects.create(file=f)
-
-        messages.success(self.request, 'The city has been added to the list of visited places, thank you') 
+        
         return super(DocumentsCreate, self).form_valid(form)
 
     def get_success_url(self, **kwargs):        
@@ -223,7 +223,6 @@ class DocumentsDelete(DeleteView):
     context_object_name = 'docs'
     success_url = reverse_lazy('datatables:Students')
     template_name = '../templates/delete.html'
-
 
 
 

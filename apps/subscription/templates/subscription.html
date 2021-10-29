@@ -3,20 +3,30 @@
 
 
 <div class="container">
-    <h1> hu hu</h1>
+    <h1> Details</h1>
     {% if cancel_at_period_end %}
         Your membership will run to the end of billing cycle ({{end_date}}). Contact our Admin for more info.
 
     {% elif membership %}
         <h3>{{customerdata.user}}</h3> <br>
-        <h3>STATUS: {{status}}</h3> <br>
-        <h3>STARTING DATE: {{start_date}}</h3> <br>
-        <h3>EXPIRY DATE: {{end_date}}</h3> <br>
-        <h3>AUTOMATICALY RENEW: {{auto_renew}}</h3> <br>
+        {% for invoice in invoice %}
+        <hr>
+
+        <a href={{invoice.invoice_pdf}} target="_blank" class="btn btn-info" role="button">View Invoice</a>
+        
+        <hr>
+        {% endfor %}
+        <h3>Plan: {{customerdata.plan}}</h3><br>
+        <h3>Status: {{status}}</h3> <br>
+        <h3>Starting date: {{start_date}}</h3> <br>
+        <h3>Expiry date: {{end_date}}</h3> <br>
+        <h3>Automatically renew: {{auto_renew}}</h3> <br>
+        <hr>
+        <h3>Payment Info: *** {{customerdata.last4}}</h3>
 
     <form action="{% url 'subscription:subscription' %}" method="POST">
         {% csrf_token %}
-        <input type="submit" value="cancel membership">
+        <input type="submit" class="btn btn-warning" value="cancel membership">
     </form>
 
     {% else %}

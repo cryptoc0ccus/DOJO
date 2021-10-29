@@ -8,8 +8,14 @@ class DateInput(forms.DateInput):
 
 
 class StudentForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['status'].required = True
+
+
+
     class Meta:
-        widgets = {'birth_date': DateInput(), 'user': forms.HiddenInput()}
+        widgets = {'birth_date': DateInput(), 'user': forms.HiddenInput(), 'upload_counter': forms.HiddenInput(), 'is_ready' :forms.HiddenInput(), 'is_founder' :forms.HiddenInput() }
         model = Student
         #fields = '__all__'
         exclude = ('user', 'qr_code', 'is_kid', 'is_teen')

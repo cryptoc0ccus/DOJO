@@ -1,0 +1,37 @@
+{%  extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<br>
+<div clas="container">
+
+	<div class="row">
+		<div class="col-md-6">
+			<div class="card card-body">
+	
+	
+				<p>Are you sure you want to delete "{{user}}"?</p>
+	
+				<form action="{% url 'accounts:delete_account' %}" method="POST">
+					
+					{% csrf_token %}
+					<a class="btn btn-warning" href="{% url 'accounts:home' %}">Cancel</a>
+	
+					<input class="btn btn-danger" type="submit" name="Confirm">
+				</form>
+			</div>
+		</div>
+	</div>
+
+
+</div>
+
+{% if messages %}
+<ul class="alert alert-primary" role="alert">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% endblock %}

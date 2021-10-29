@@ -3,7 +3,12 @@
 
 <div class ="container">
 
-    <p> You agree with:</p>
+    {% if price_age == 'kid' or price_age == 'teen' %}
+
+    <p>I, {{student.guardians_name}} , Guardian of {{student.first_name}} {{student.last_name }} agree with: </p>
+    {% else %}
+    <p> I, {{student.first_name}} {{student.last_name}} agree with:</p>
+    {% endif %}
     <li>
         <ul>Principles</ul>
         <ul>Membership</ul>
@@ -15,8 +20,9 @@
         <input type="checkbox" id="myterms" name="terms" required>
         <label for="terms">I read and I agree with the terms and conditions above </label>
         <br><br>
+        <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">Proceed</button>
     
-        <input type="submit" name="Proceed to Checkout"/>
+
     </form>
 
 </div>

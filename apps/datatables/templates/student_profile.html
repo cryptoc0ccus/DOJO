@@ -14,23 +14,27 @@
               max-width:400px;
               height:auto;
               border: solid 1px #CCC"/>
-      <br>
+      <br><br>
       <a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'datatables:Student-update' student.id %}">Update Student</a>         
      
-      <a class="btn btn-outline-danger  btn-sm btn-block" href="{% url 'datatables:Student-delete' student.id %}">Delete Student</a>  
+      <a class="btn btn-outline-danger  btn-sm btn-block" href="{% url 'datatables:Student-delete' student.id %}">Delete Student</a>  <br>
   
     </div>
   
     
     <div class="col-md">
       <h1 align="center"> {{ student.first_name }} {{ student.last_name }} </h1>
+      {% if student.is_kid or student.is_teen %}
+      <h3 align="center"><b>Guardian:</b> {{ student.guardians_name }}</h3>
+      {% endif %}
       <h2 align="center"> {{ student.user }} </h2>
+      <h3 align="center"><b>Status:</b> {{ student.status }}</h3>
   
   
     </div>
   
 
- 
+    <br>
  
   <hr>
   
@@ -50,9 +54,11 @@
 	<div class="col-md-6">
 		<div class="card card-body">
 			<h5>Primary Information</h5>
-			<hr>		
+			<hr>
+      		
 			<p><b>Phone:</b> {{ student.phone }}</p>
 			<p><b>Address:</b> {{ student.address }}</p>
+      {% if student.status == 'Student' %}
 			<p><b>Age:</b> {{ student.age }}</p>
 			<p><b>Gender:</b> {{ student.gender }} </p>
       <hr>
@@ -124,12 +130,12 @@
 
 		</div>
 	</div> 
-
+  {% endif %}
   <!--SECOND COL -->
   <div class="col-md-6">
     <div class="card card-body">
       <h5>Documents</h5>
-      <hr>
+      <hr>     
       <a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'datatables:document-upload' student.id %}">Upload file</a>
       {% include "docs_list.html" with student=student %}
     </div>
@@ -141,6 +147,15 @@
 
 
 
+
+
+{% if messages %}
+<ul class="alert alert-primary" role="alert">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 
 
 

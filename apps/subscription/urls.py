@@ -12,7 +12,7 @@ app_name = 'subscription'
 urlpatterns = [
     path('terms', v.terms, name='terms'),
     path('join', v.join, name='join'),
-    path('checkout', v.checkout, name='checkout'),
+  #  path('checkout', v.checkout, name='checkout'),
     path('checkout_sepa', v.checkout_sepa, name='checkout_sepa'),
     path('', v.subscription, name='subscription'),
     

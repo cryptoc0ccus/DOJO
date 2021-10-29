@@ -1,7 +1,20 @@
 {% extends 'base.html' %}
 {% block content %}
+
+<style>
+  #coupon-form{
+    display: none;
+      width: 300px;
+      border: 1px solid #ccc;
+      padding: 14px;
+      background: #ececec;
+  }	
+  </style>
+
 <h1 class="row justify-content-center">Payment with SEPA<br></h1>
+
 <div class="container">
+  
   <div class="row justify-content-center">
       <div class="col-md-4 order-md-2 mb-4">
         <h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -9,6 +22,7 @@
           <span class="badge badge-secondary badge-pill">1</span>
         </h4>
         <ul class="list-group mb-3">
+          
           <li class="list-group-item d-flex justify-content-between lh-condensed">
             <div>
               <h6 class="my-0">BJJ DOJO BERLIN</h6>
@@ -16,9 +30,11 @@
             </div>
             <span class="text-muted">€{{ og_dollar }}</span>
           </li>
+          
           {% if coupon != 'none' %}
-          <li class="list-group-item d-flex justify-content-between bg-light">
+          <li class="list-group-item id="sepa-container" d-flex justify-content-between bg-light">
             <div class="text-success">
+              
               <h6 class="my-0">Promo code</h6>
               <small>{{ coupon | upper }}</small>
             </div>
@@ -31,28 +47,39 @@
           </li>
         </ul>
 
-        <form class="card p-2" action="{% url 'subscription:checkout_sepa' %}" method="GET">
+        <button id="coupon-button" class="btn btn-primary">I have a discount !</button>    
+
+
+        <form id="coupon-form" class="card p-2 hidden" action="{% url 'subscription:checkout_sepa' %}" method="GET">
           <div class="input-group">
             <input type="text" class="form-control" placeholder="Promo code" name="coupon">
             <input type="hidden" value="{{ plan }}" name="plan" />
             <div class="input-group-append">
-              <button type="submit" class="btn btn-secondary">Redeem</button>
+              <button type="submit" class="btn btn-danger">Redeem</button>
+              
             </div>
+            <p>* Don't forget to click on "Redeem" and check if the right prices is updated!</p>
           </div>
         </form>
+
+
 
         <div class="text-center pt-3">
         <form action="{% url 'subscription:checkout_sepa' %}" method="POST">
           {% csrf_token %}
+          {% if price_age == 'kid' or price_age == 'teen' %}
+          <h3>ATTENTION: This must be filled by the Guardian !</h3>
+
+          {% endif%}
           <input type="text" class="form-control" placeholder="Your Name" name="name"><br>
           <input type="text" class="form-control" placeholder="IBAN Number" name="iban"><br>
           <input type="hidden" value="{{ plan }}" name="plan" />
           <input type="hidden" value="{{ coupon }}" name="coupon" />
-          <p>By providing your IBAN and confirming this payment, you authorise (A) Rocketship Inc. 
+          <p align="left">By providing your IBAN and confirming this payment, you authorise (A) BJJ DOJO BERLIN 
             and Stripe, our payment service provider, to send instructions to your bank to debit your account
-             and (B) your bank to debit your account in accordance with those instructions. 
-             You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. 
-             A refund must be claimed within 8 weeks starting from the date on which your account was debited.</p>
+            and (B) your bank to debit your account in accordance with those instructions. 
+            You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. 
+            A refund must be claimed within 8 weeks starting from the date on which your account was debited.</p>
 
             <button type="submit" class="btn btn-secondary">Proceed</button>
             
@@ -64,4 +91,23 @@
       </div>
       </div>
  
+      {% if messages %}
+      <ul class="alert alert-warning" role ="alert">
+          {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+          {% endfor %}
+      </ul>
+      {% endif %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script>
+  $(document).ready(function(){
+    $('#coupon-button').click(function(){
+        $('#coupon-form').toggle(200);
+    });
+  });
+  </script>
+
+
+
 {% endblock %}

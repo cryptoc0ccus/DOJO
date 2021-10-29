@@ -34,6 +34,7 @@ urlpatterns = [
 
 ## QR CODE
     path('qrcode/', v.manage_qrcode, name='manage_qrcode'),
+ 
     
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

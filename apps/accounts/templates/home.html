@@ -52,7 +52,7 @@
 <div class="container-fluid">
     
 <h2>Your Account</h2>
-<p>Choose one option below</p>
+<p>Personal Info</p>
 
 <div class="row">
   <div class="column">
@@ -81,6 +81,45 @@
     </div>
   </div>
 
+
+
+
+  <div class="column">
+    <div class="card">
+      <h3>Your Documents</h3>
+      {% if has_profile %}
+      <div class="w3-section">
+          {% if std_id.upload_counter == 0 %}
+          <h4>1. Upload Your ID with Signature (example here)</h4>
+          {% include "document-upload.html"  %}      
+
+
+          {% elif std_id.upload_counter == 1 %}
+          <h4>2. Upload a Proof of Address (example here)</h4>    
+          {% include "document-upload.html"  %}    
+          
+          {% elif std_id.upload_counter == 2 %}
+          <h4>3. Upload DOJO Terms and conditions - Signed up</h4>  
+          {% include "document-upload.html"  %}  
+          {% else %}
+          <p>All Documents uploaded - Use your profile to View / Upload other Files</p>   
+
+      
+        {% endif %}
+
+
+     
+
+
+      </div>       
+      {% endif %}
+      
+    </div>
+  </div>
+
+
+
+
   <div class="column">
     <div class="card">
       <h3>Your Subscription</h3>
@@ -92,15 +131,26 @@
       <div class="w3-section">
         <a class="btn btn-primary  btn-sm btn-block" href="{% url 'datatables:Membership-display' user.student.membership.id %}">View Details</a>
       </div>
-      {% else %}
+      {% endif %}
+
+
       {% if not has_profile %}
-      <h2>Create a Profile first</h2>
-      {% else %}
+      <p>- Create a Profile first</p>
+      {% endif %}
+
+      {% if std_id.upload_counter <= 2 %}
+      <p>- Upload all documents first</p>
+      {% endif %} 
+
+      {% if has_profile and std_id.upload_counter > 2 %}
+      {% if not has_subscription or not has_free_subscription %}
       <div class="w3-section">
         <a class="btn btn-primary  btn-sm btn-block" href="{% url 'subscription:terms' %}">Create</a>
       </div>
       {% endif %}
+
       {% endif %}
+    
 
 
 
@@ -121,19 +171,18 @@
     </div>
   </div>
   
-  <div class="column">
-    <div class="card">
-      <h3>Timetable</h3>
-      <p>Coming soon</p>
-      
-    </div>
-  </div>
-</div>
 
     
 
 </div>
 
+{% if messages %}
+<ul class="alert alert-primary" role="alert">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 
 {% endblock %}
 

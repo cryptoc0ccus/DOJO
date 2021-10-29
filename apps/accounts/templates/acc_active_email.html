@@ -1,0 +1,10 @@
+{% autoescape off %}
+Hi,
+
+Please click on the link to confirm your registration at the DOJO Database,
+http://{{ domain }}{% url 'accounts:activate' uidb64=uid token=token %}
+
+Your account will be active afterwards.
+
+Your Dojo
+{% endautoescape %}

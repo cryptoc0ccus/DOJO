@@ -2,13 +2,12 @@ from django.shortcuts import render
 from .models import *
 
 from django.shortcuts import render, redirect
-from django.contrib.auth import logout, login, authenticate
-from django.contrib.auth.decorators import login_required
 
-# Create your views here.
-# import qrcode
-# import qrcode.image.svg
-# from io import BytesIO
+from django.core.mail import send_mail, BadHeaderError
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from apps.attendance.forms import ContactForm
+from django_require_login.decorators import public
 
 
 def displayqrcode(request):
@@ -17,12 +16,24 @@ def displayqrcode(request):
 
     return render(request, 'member_qrcode.html', context )
 
-#     context = {}
-#     if request.method == "POST":
-#         factory = qrcode.image.svg.SvgImage
 
-def rendertesthash(request, pk):
-    testhash_id = TestHash.objects.get(id=pk)
-    context = {'testhash': testhash_id}
+@public
+def contactView(request):
+    if request.method == 'GET':
+        form = ContactForm()
+    else:
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            subject = form.cleaned_data['subject']
+            from_email = form.cleaned_data['from_email']
+            message = form.cleaned_data['message']
+            try:
+                send_mail(subject, message, from_email, ['admin@example.com'])
+            except BadHeaderError:
+                return HttpResponse('Invalid header found.')
+            return redirect('success')
+    return render(request, "email_visitor.html", {'form': form})
 
-    return render(request, 'testhash.html', context )
+@public
+def successView(request):
+    return HttpResponse('Success! Thank you for your message.')

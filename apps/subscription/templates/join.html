@@ -46,164 +46,105 @@
     </style>
 
 <!-- FIRST ROW -->
-<div class="container-fluid">
+
+{% if price_age != 'kid' %}
+<div class="container">
   <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
     <h1 class="display-4">Membership</h1>
     <p class="lead">Adults</p>
   </div>
 
+
+{% if premium == 'yes' %}
+  {% if founder == 'founder' %}
   <div class="row">
-    <div class="column">
+    <div class="col-md-8 mx-auto">
       <div class="card">
-        
+
         <div class="card mb-4 shadow-sm">
           <div class="card-header">
-            <h4 class="my-0 font-weight-normal">52 Weeks<small class="text-primary">  Save $100!</small></h4>
+            <h4 class="my-0 font-weight-normal">Founder</h4>
+          </div>
+          <div class="card-body">
+            <h1 class="card-title pricing-card-title">€60 <small class="text-muted">/ mo</small></h1>
+            <ul class="list-unstyled mt-3 mb-4">
+              <li>Founder's Price</li>
+              <li>Cancel at any time!*</li>
+            </ul>
+            <small>*Warning: You won't be able to renew it again !</small>
+            <br> <br>
+            <a href="{% url 'subscription:checkout_sepa'%}?plan=founder"><button type="button"
+                class="btn btn-lg btn-block btn-secondary">SEPA</button></a>
+
+          </div>
+        </div>
+  {% endif %}
+
+        <div class="card mb-4 shadow-sm">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal">Pioneer</h4>
           </div>
           <div class="card-body">
             <h1 class="card-title pricing-card-title">€90 <small class="text-muted">/ mo</small></h1>
             <ul class="list-unstyled mt-3 mb-4">
-              <li>Online Access</li>
-              <li>Dojo Access</li>
-              <li><b>Starter Kit</b></li>
-              <li>Members Only Events</li>
+              <li>Pioneer's Price</li>
+              <li>Cancel at any time!*</li>
             </ul>
-            <a href="{% url 'subscription:checkout'%}?plan=adults 52 weeks"><button type="button" class="btn btn-lg btn-block btn-primary">Credit Card</button></a>
+            <small>*Warning: You won't be able to renew it again !</small>
             <br> <br>
-            <a href="{% url 'subscription:checkout_sepa'%}?plan=adults 52 weeks"><button type="button" class="btn btn-lg btn-block btn-secondary">SEPA</button></a>
-    
+            <a href="{% url 'subscription:checkout_sepa'%}?plan=pioneer"><button type="button"
+                class="btn btn-lg btn-block btn-secondary">SEPA</button></a>
+
           </div>
-        </div>
-
-      </div>
-    </div>
-  
-    <div class="column">
-      <div class="card">
-        
-
-        <div class="card mb-4 shadow-sm">
-          <div class="card-header">
-            <h4 class="my-0 font-weight-normal">26 Weeks</h4>
-          </div>
-          <div class="card-body">
-            <h1 class="card-title pricing-card-title">€100 <small class="text-muted">/ mo</small></h1>
-            <ul class="list-unstyled mt-3 mb-4">
-              <li>Online Access</li>
-              <li>Dojo Access</li>
-              <li>Members Only Events</li> 
-              <br>
-            </ul>
-            <a href="{% url 'subscription:checkout'%}?plan=adults 26 weeks"><button type="button" class="btn btn-lg btn-block btn-primary">Credit Card</button></a>
-            <br><br>
-            <a href="{% url 'subscription:checkout_sepa'%}?plan=adults 26 weeks"><button type="button" class="btn btn-lg btn-block btn-secondary">SEPA</button></a>
-          </div>
-        </div>
+        </div>        
+{% else %}
+<p>You only get non-premium memberships !</p>
+{% endif %}
 
 
-      </div>
-    </div>
-    
-    <div class="column">
-      <div class="card">
-
-        <div class="card mb-4 shadow-sm">
-          <div class="card-header">
-            <h4 class="my-0 font-weight-normal">12 Weeks</h4>
-          </div>
-          <div class="card-body">
-            <h1 class="card-title pricing-card-title">€108 <small class="text-muted">/ mo</small></h1>
-            <ul class="list-unstyled mt-3 mb-4">
-              <li>Online Access</li>
-              <li>Dojo Access</li>
-              <li>Members Only Events</li>
-              <br>
-            </ul>
-            <a href="{% url 'subscription:checkout'%}?plan=adults 12 weeks"><button type="button" class="btn btn-lg btn-block btn-primary">Credit Card</button></a>
-            <br><br>
-            <a href="{% url 'subscription:checkout_sepa'%}?plan=adults 12 weeks"><button type="button" class="btn btn-lg btn-block btn-secondary">SEPA</button></a>
-          </div>
-        </div>
-
-      </div>
-    </div>
-    
-    <div class="column">
-      <div class="card">
-
-
-        <div class="card mb-4 shadow-sm">
-          <div class="card-header">
-            <h4 class="my-0 font-weight-normal">4 Weeks</h4>
-          </div>
-          <div class="card-body">
-            <h1 class="card-title pricing-card-title">€120 <small class="text-muted">/ mo</small></h1>
-            <ul class="list-unstyled mt-3 mb-4">
-              <li>Online Access</li>
-              <li>Dojo Access</li>
-              <li>Private Q&A</li>
-              <li>Members Only Events</li>
-            </ul>
-            <a href="{% url 'subscription:checkout'%}?plan=adults 4 weeks"><button type="button" class="btn btn-lg btn-block btn-primary">Credit Card</button></a>
-            <br><br>
-            <a href="{% url 'subscription:checkout_sepa'%}?plan=adults 4 weeks"><button type="button" class="btn btn-lg btn-block btn-secondary">SEPA</button></a>
-          </div>
-        </div>
 
 
 
 
       </div>
     </div>
+
   </div>
+</div>
 
 
+
+    
+
+
+
+
+
+
+ {% else %}
   <!-- SECOND ROW -->
+<div class="container">
   <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
     <h1 class="display-4">Membership</h1>
     <p class="lead">Kids - Younger than 14 Years old</p>
   </div>
 
-  <div class="row">
-    <div class="column">
-      <div class="card">
-       
-        <div class="card mb-4 shadow-sm">
-          <div class="card-header">
-            <h4 class="my-0 font-weight-normal">52 Weeks <small class="text-primary">  Save $100!</small></h4>
-          </div>
-          <div class="card-body">
-            <h1 class="card-title pricing-card-title">€43.2 <small class="text-muted">/ mo</small></h1>
-            <ul class="list-unstyled mt-3 mb-4">
-              <li>Starter Kit</li>
-              <li>Members Only Events</li>
-            </ul>
-            <a href="{% url 'subscription:checkout'%}?plan=kids 52 weeks"><button type="button" class="btn btn-lg btn-block btn-primary">Credit Card</button></a>
-            <br><br>
-            <a href="{% url 'subscription:checkout_sepa'%}?plan=kids 52 weeks"><button type="button" class="btn btn-lg btn-block btn-secondary">SEPA</button></a>
-    
-          </div>
-        </div>
 
-
-      </div>
-    </div>
   
-    <div class="column">
+    <div class="col-md-8 mx-auto" >
       <div class="card">
 
         <div class="card mb-4 shadow-sm">
           <div class="card-header">
-            <h4 class="my-0 font-weight-normal">26 Weeks</h4>
+            <h4 class="my-0 font-weight-normal">4 Weeks<small class="text-primary">  Offer ends soon! </small></h4>
           </div>
           <div class="card-body">
             <h1 class="card-title pricing-card-title">€49 <small class="text-muted">/ mo</small></h1>
             <ul class="list-unstyled mt-3 mb-4">
-              <li>Members Only Events</li>
+              <li>Cancel at any time !</li>
               <br>
             </ul>
-            <a href="{% url 'subscription:checkout'%}?plan=kids 26 weeks"><button type="button" class="btn btn-lg btn-block btn-primary">Credit Card</button></a>
-            <br><br>
+           
             <a href="{% url 'subscription:checkout_sepa'%}?plan=kids 26 weeks"><button type="button" class="btn btn-lg btn-block btn-secondary">SEPA</button></a>
           </div>
         </div>
@@ -212,70 +153,16 @@
       </div>
     </div>
     
-    <div class="column">
-      <div class="card">
-
-        <div class="card mb-4 shadow-sm">
-          <div class="card-header">
-            <h4 class="my-0 font-weight-normal">12 Weeks</h4>
-          </div>
-          <div class="card-body">
-            <h1 class="card-title pricing-card-title">€55 <small class="text-muted">/ mo</small></h1>
-            <ul class="list-unstyled mt-3 mb-4">
-              <li>Members Only Events</li>
-              <br>
-            </ul>
-            <a href="{% url 'subscription:checkout'%}?plan=kids 12 weeks"><button type="button" class="btn btn-lg btn-block btn-primary">Credit Card</button></a>
-            <br><br>
-            <a href="{% url 'subscription:checkout_sepa'%}?plan=kids 12 weeks"><button type="button" class="btn btn-lg btn-block btn-secondary">SEPA</button></a>
-          </div>
-        </div>
-
-
-
-
-      </div>
-    </div>
-    
-    <div class="column">
-      <div class="card">
-
-        <div class="card mb-4 shadow-sm">
-          <div class="card-header">
-            <h4 class="my-0 font-weight-normal">4 Weeks</h4>
-          </div>
-          <div class="card-body">
-            <h1 class="card-title pricing-card-title">€64.8 <small class="text-muted">/ mo</small></h1>
-            <ul class="list-unstyled mt-3 mb-4">
-              <li>Members Only Events</li>
-              <br>
-            </ul>
-            <a href="{% url 'subscription:checkout'%}?plan=kids 4 weeks"><button type="button" class="btn btn-lg btn-block btn-primary">Credit Card</button></a>
-            <br><br>
-            <a href="{% url 'subscription:checkout_sepa'%}?plan=kids 4 weeks"><button type="button" class="btn btn-lg btn-block btn-secondary">SEPA</button></a>
-          </div>
-        </div>
-
       </div>
     </div>
   </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+{% endif %}
 </div>
+</div>
+
+
+
 
 
 

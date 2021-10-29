@@ -1,3 +1,4 @@
+
 """
 Django settings for DjangoExp project.
 
@@ -37,7 +38,6 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', default=[], cast=Csv())
 
 INSTALLED_APPS = [   
     'apps.accounts',
-#    'apps.core',
     'apps.datatables',
     'apps.subscription',
     'apps.attendance',
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'django_extensions',
     'django_q',
+
 
 
   #  'django.contrib.sites',
@@ -71,7 +72,19 @@ MIDDLEWARE = [
 LOGIN_URL = 'accounts:user_login'
 LOGOUT_REDIRECT_URL = 'accounts:user_login'
 LOGIN_REDIRECT_URL = 'accounts:home'
-REQUIRE_LOGIN_PUBLIC_NAMED_URLS = (LOGIN_URL, LOGOUT_REDIRECT_URL)
+
+
+
+
+
+PASSWORD_RESET_URL = 'accounts:password_reset'
+PASSWORD_RESET_DONE_URL = 'accounts:password_reset_done'
+PASSWORD_RESET_COMPLETE_URL = 'accounts:password_reset_complete'
+
+REQUIRE_LOGIN_PUBLIC_NAMED_URLS = (LOGIN_URL, LOGOUT_REDIRECT_URL, PASSWORD_RESET_URL, PASSWORD_RESET_DONE_URL, PASSWORD_RESET_COMPLETE_URL)
+
+
+
 
 ROOT_URLCONF = 'DOJO.urls'
 
@@ -84,6 +97,7 @@ EMAIL_PORT = config('EMAIL_PORT', cast=int)
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+
 
 
 
@@ -186,8 +200,8 @@ GOOGLE_RECAPTCHA_SITE_KEY = config('GOOGLE_RECAPTCHA_SITE_KEY')
 
 
 
-STRIPE_TEST_PUBLIC_KEY ='pk_test_51JR01OJJBXKsbxPkPwpPtbUyxf9k394RCe8glAcLPNtbqvcFW23DERkkTJMNQy6bCVpNyD29rQThQDCtYv8eiLjW00LwbbBC29'
-STRIPE_TEST_SECRET_KEY = 'sk_test_51JR01OJJBXKsbxPkNGdWryMhrnATm1TlkNroOUoGDa91UUIo5RvCIY7I6PMYQgRxFWnrLYHRksHwBJYUh43EcBww00wCQ8y8Sa'
+STRIPE_TEST_PUBLIC_KEY = config('STRIPE_TEST_PUBLIC_KEY')
+STRIPE_TEST_SECRET_KEY = config('STRIPE_TEST_SECRET_KEY')
 STRIPE_LIVE_MODE = False  # Change to True in production
 
 
@@ -197,3 +211,7 @@ Q_CLUSTER = {
     "name": "DOJO",
     "orm": "default",  # Use Django's ORM + database for broker
 }
+
+# REQUIRE_LOGIN_PUBLIC_NAMED_URLS = 'success.html'
+# VERIFICATION_SUCCESS_TEMPLATE = "success.html"
+

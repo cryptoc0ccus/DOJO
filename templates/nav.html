@@ -14,37 +14,15 @@
  
 </style>
 
-<!-- <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
- <img src="{% static 'media/bjjdojoberlin-logo-150x150-1.png' %}">
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
 
-      <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">Home</a>
-      </li>
 
-      {% if request.user.is_staff %}
-      <li class="nav-item active">
-        <a class="nav-link" href="{% url 'accounts:home' %}">Dashboard</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'accounts:home' %}">Products</a>
-      </li>
-      {% endif %}
-    </ul>
-  </div>
-
-  <span class="hello-msg">Hello, {{request.user}}</span>
-  <span ><a  class="hello-msg" href="{% url 'accounts:home' %}">Logout</a></span>
-
-</nav> -->
 
 
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
   <img src="{% static 'media/bjjdojoberlin-logo-150x150-1.png' %}">
+
+  {% if user.is_authenticated %}
+
   <div class="container-fluid">
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,44 +30,60 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/">Home</a>
-        </li>
-        {% if user.is_authenticated %}
-        <li class="nav-item">
-          <a class="nav-link" href="/">Link</a>
-        </li>
+       
+       
+       
+       {% if request.user.is_superuser %}
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Profile
+          <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Dashboard
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            {% if user.is_admin %}
-            <li><a class="dropdown-item" href="{% url 'datatables:Students' %}">Admin Dashboard</a></li>
-            <li><a class="dropdown-item" href="{% url 'admin:index' %}">Admin Dashboard 2</a></li>
-
-            {% endif %}
-            <li><a class="dropdown-item" href="#">Profile</a></li>
+            <li><a class="dropdown-item" href="{% url 'accounts:home' %}">Dashboard</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
+            <li><a class="dropdown-item" href="{% url 'datatables:Students'%}">Dashboard Admin</a></li>
+            <li><a class="dropdown-item" href="/admin">Dashboard Superuser</a></li>
+            
+            
           </ul>
         </li>
-
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Schedule
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'accounts:home' %}">Dashboard</a>
         </li>
-        {% if user.is_superuser %}
+        {% endif %}
+
+
+        
+      
+        {% if request.user.student %}
+
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'datatables:Student' user.student.id %}"">Profile</a>
+        </li>
+
+
+        {% endif %}
+
+        {% if request.user.student.membership.is_active %}
+
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'subscription:subscription' %}"">Subscription</a>
+        </li>
+
+
+       
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'attendance:display-qrcode' %}"">QR CODE</a>
+        </li>
+
+
+        {% endif %}
+       
+        {% if anythingelse %}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Financials
+            Something
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" href="#">Action</a></li>
@@ -99,6 +93,7 @@
           </ul>
         </li>
         {% endif %}
+      
 
 
       <li class="nav-item dropdown">
@@ -106,10 +101,9 @@
           Account
         </a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <li><a class="dropdown-item" href="#">login</a></li>
-          <li><a class="dropdown-item" href="{% url 'accounts:home' %}">logout</a></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="">Register</a></li>
+         
+          <li><a class="dropdown-item" href="{% url 'accounts:delete_account' %}">Delete account</a></li>
+
         </ul>
       </li>
 
@@ -119,23 +113,20 @@
 
     </div>
   </div>
+
+
+
   
   <span class="hello-msg">Hello, {{request.user}}</span>
   <span ><a  class="hello-msg" href="{% url 'accounts:user_logout' %}">Logout</a></span>
-  {% else %}
-
-  <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-      Account
-    </a>
-    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-      <li><a class="dropdown-item" href="{% url 'accounts:user_login' %}">Login</a></li>
-      <li><a class="dropdown-item" href="{% url 'accounts:user_register' %}">Register</a></li>
-    </ul>
-    {% endif %}
-  </li>
+ 
+  {% endif %}
 
 </nav>
+
+
+
+
 
 
 {% endblock %}

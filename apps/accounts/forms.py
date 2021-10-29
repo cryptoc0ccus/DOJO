@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
 from .models import Account
+from apps.datatables.models import Document
 
 
 class RegistrationForm(UserCreationForm):
@@ -31,3 +32,11 @@ class AccountUpdateForm(forms.ModelForm):
     class Meta:
         model = Account
         exclude = ()
+
+class UploadDocumentForm(forms.ModelForm):
+
+    class Meta:
+        widgets = {'student': forms.HiddenInput()}
+        model = Document
+        fields = '__all__'
+       
