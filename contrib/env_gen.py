@@ -8,8 +8,8 @@ chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
 CONFIG_STRING = """
 DEBUG=False
 SECRET_KEY=%s
-ALLOWED_HOSTS=127.0.0.1, .localhost
-
+#ALLOWED_HOSTS=127.0.0.1, .localhost
+ALLOWED_HOSTS=['dojo.uber.space']
 DEFAULT_FROM_EMAIL ='noreply@bjj.berlin'
 EMAIL_HOST='hegemone.uberspace.de'
 EMAIL_PORT=587
