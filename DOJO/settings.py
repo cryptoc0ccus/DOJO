@@ -32,10 +32,11 @@ SECRET_KEY = config('SECRET_KEY')
 #DEBUG = config('DEBUG', default=False, cast=bool)
 
 
-DEBUG = os.environ.get('DEBUG_VALUE')
+#DEBUG = os.environ.get('DEBUG_VALUE')
+DEBUG=True
 
 #ALLOWED_HOSTS = config('ALLOWED_HOSTS', default=[], cast=Csv())
-ALLOWED_HOSTS = ['bjjdojo.herokuapp.com', '0.0.0.0']
+ALLOWED_HOSTS = ['bjjdojo.herokuapp.com', '127.0.0.1']
 
 # Application definition
 
