@@ -27,6 +27,7 @@ django-require-login==1.1.1
 django-tables2==2.4.0
 django-widget-tweaks==1.4.8
 filelock==3.3.1
+gunicorn==20.1.0
 html5lib==1.1
 idna==3.2
 jeepney==0.7.1

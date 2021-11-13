@@ -35,7 +35,7 @@ export DEBUG_VALUE=”True”
 DEBUG = os.environ.get(‘DEBUG_VALUE’)
 
 #ALLOWED_HOSTS = config('ALLOWED_HOSTS', default=[], cast=Csv())
-ALLOWED_HOSTS = ['bjjdojo.herokuapp.com']
+ALLOWED_HOSTS = ['bjjdojo.herokuapp.com', ‘0.0.0.0’]
 
 # Application definition
 
